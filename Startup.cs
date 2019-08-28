@@ -24,7 +24,10 @@ namespace AllInOne
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationContext>(options => 
+                options
+                    .UseLazyLoadingProxies()
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -39,6 +42,7 @@ namespace AllInOne
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddScoped<IGroupLib, GroupLib>();
+            services.AddScoped<IListLib, ListLib>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -54,5 +54,6 @@ namespace AllInOne.Data
         {
             return _unitOfWork.Context.Set<T>().FirstOrDefault(where);
         }
+
     }
 }
