@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AllInOne.Model
+namespace AllInOne.Data.Entity
 {
     public class BaseEntity
     {

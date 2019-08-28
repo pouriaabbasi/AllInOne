@@ -1,4 +1,6 @@
 using AllInOne.Data;
+using AllInOne.Services.Contract.Todo;
+using AllInOne.Services.Implementation.Todo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,8 +34,11 @@ namespace AllInOne
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            services.AddSingleton<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<DbContext, ApplicationContext>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            services.AddScoped<IGroupLib, GroupLib>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

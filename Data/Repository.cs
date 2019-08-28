@@ -8,9 +8,9 @@ namespace AllInOne.Data
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public Repository(UnitOfWork unitOfWork)
+        public Repository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -37,9 +37,7 @@ namespace AllInOne.Data
 
         public void Delete(T entity)
         {
-            var existing = _unitOfWork.Context.Set<T>().Find(entity);
-            if (existing != null)
-                _unitOfWork.Context.Set<T>().Remove(entity);
+            _unitOfWork.Context.Set<T>().Remove(entity);
         }
 
         public void Update(T entity)

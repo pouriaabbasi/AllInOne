@@ -1,5 +1,4 @@
-using AllInOne.Model.Todo;
-using JetBrains.Annotations;
+using AllInOne.Data.Entity.Todo;
 using Microsoft.EntityFrameworkCore;
 
 namespace AllInOne.Data
