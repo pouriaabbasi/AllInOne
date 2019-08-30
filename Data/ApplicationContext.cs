@@ -14,6 +14,7 @@ namespace AllInOne.Data
         //Todo
         public DbSet<Group> Groups { get; set; }
         public DbSet<List> Lists { get; set; }
+        public DbSet<Item> Items { get; set; }
 
         //Security
         public DbSet<User> Users { get; set; }

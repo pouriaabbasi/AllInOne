@@ -16,5 +16,6 @@ namespace AllInOne.Data.Entity.Security
 
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<List> Lists { get; set; }
+        public virtual ICollection<Item> Items { get; set; }
     }
 }

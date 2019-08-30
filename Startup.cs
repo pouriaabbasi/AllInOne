@@ -43,6 +43,7 @@ namespace AllInOne
 
             services.AddScoped<IGroupLib, GroupLib>();
             services.AddScoped<IListLib, ListLib>();
+            services.AddScoped<IItemLib, ItemLib>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
