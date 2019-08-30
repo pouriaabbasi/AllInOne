@@ -7,10 +7,10 @@ namespace AllInOne.Services.Contract.Todo
     {
         ListModel AddList(AddListModel model);
         ListModel EditList(EditListModel model);
-        bool DeleteList(long listId);
-        bool AddListToGroup(long listId, long groupId);
-        bool RemoveListFromGroup(long listId, long groupId);
-        ListModel GetList(long listId);
-        List<ListModel> GetAllList();
+        bool DeleteList(long listId, long userId);
+        bool AddListToGroup(long listId, long groupId, long userId);
+        bool RemoveListFromGroup(long listId, long groupId, long userId);
+        ListModel GetList(long listId, long userId);
+        List<ListModel> GetAllList(long userId);
     }
 }

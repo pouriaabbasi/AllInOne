@@ -25,7 +25,8 @@ namespace AllInOne.Services.Implementation.Todo
         {
             var entity = new Group
             {
-                Name = model.Name
+                Name = model.Name,
+                UserId = model.UserId
             };
 
             groupRepo.Add(entity);
@@ -40,6 +41,8 @@ namespace AllInOne.Services.Implementation.Todo
             var entity = groupRepo.First(x => x.Id == model.Id);
             if (entity == null) throw new System.Exception("Group Not Exist");
 
+            if (entity.UserId != model.UserId) throw new System.Exception("User Doesn't Owner Of Group");
+
             entity.Name = model.Name;
 
             groupRepo.Update(entity);
@@ -49,10 +52,12 @@ namespace AllInOne.Services.Implementation.Todo
             return ConverGroupToGroupModel(entity);
         }
 
-        public bool DeleteGroup(long groupId)
+        public bool DeleteGroup(long groupId, long userId)
         {
             var entity = groupRepo.First(x => x.Id == groupId);
             if (entity == null) throw new System.Exception("Group Not Exist");
+
+            if (entity.UserId != userId) throw new System.Exception("User Doesn't Owner Of Group");
 
             groupRepo.Delete(entity);
 
@@ -61,26 +66,32 @@ namespace AllInOne.Services.Implementation.Todo
             return true;
         }
 
+        public GroupModel GetGroup(long groupId, long userId)
+        {
+            var entity = groupRepo.First(x => x.Id == groupId);
+            if (entity == null) throw new System.Exception("Group Not Exist");
+
+            if (entity.UserId != userId) throw new System.Exception("User Doesn't Owner Of Group");
+
+            return ConverGroupToGroupModel(entity);
+        }
+
+        public List<GroupModel> GetAllGroups(long userId)
+        {
+            return groupRepo.GetQuery()
+                .Where(x => x.UserId == userId)
+                .Select(ConverGroupToGroupModel)
+                .ToList();
+        }
+
         private GroupModel ConverGroupToGroupModel(Group entity)
         {
             return new GroupModel
             {
                 Id = entity.Id,
-                Name = entity.Name
+                Name = entity.Name,
+                UserId = entity.UserId
             };
-        }
-
-        public GroupModel GetGroup(long groupId)
-        {
-            var entity = groupRepo.First(x => x.Id == groupId);
-            if (entity == null) throw new System.Exception("Group Not Exist");
-
-            return ConverGroupToGroupModel(entity);
-        }
-
-        public List<GroupModel> GetAllGroups()
-        {
-            return groupRepo.Get().Select(ConverGroupToGroupModel).ToList();
         }
     }
 }

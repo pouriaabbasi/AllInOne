@@ -28,7 +28,8 @@ namespace AllInOne.Services.Implementation.Todo
             var entity = new List
             {
                 Name = model.Name,
-                GroupId = model.GroupId
+                GroupId = model.GroupId,
+                UserId = model.UserId
             };
 
             listRepo.Add(entity);
@@ -38,13 +39,17 @@ namespace AllInOne.Services.Implementation.Todo
             return ConvertListToListModel(entity);
         }
 
-        public bool AddListToGroup(long listId, long groupId)
+        public bool AddListToGroup(long listId, long groupId, long userId)
         {
             var listEntity = listRepo.First(x => x.Id == listId);
             if (listEntity == null) throw new System.Exception("List Not Exist");
 
             var groupEntity = groupRepo.First(x => x.Id == groupId);
             if (groupEntity == null) throw new System.Exception("Group Not Exist");
+
+            if (listEntity.UserId != userId) throw new System.Exception("User Doesn't Owner Of List");
+
+            if (groupEntity.UserId != userId) throw new System.Exception("User Doesn't Owner Of Group");
 
             listEntity.GroupId = groupId;
 
@@ -55,10 +60,12 @@ namespace AllInOne.Services.Implementation.Todo
             return true;
         }
 
-        public bool DeleteList(long listId)
+        public bool DeleteList(long listId, long userId)
         {
             var entity = listRepo.First(x => x.Id == listId);
             if (entity == null) throw new System.Exception("List Not Exist");
+
+            if (entity.UserId != userId) throw new System.Exception("User Doesn't Owner Of List");
 
             listRepo.Delete(entity);
 
@@ -72,6 +79,9 @@ namespace AllInOne.Services.Implementation.Todo
             var entity = listRepo.First(x => x.Id == model.Id);
             if (entity == null) throw new System.Exception("List Not Exist");
 
+            if (entity.UserId != model.UserId) throw new System.Exception("User Doesn't Owner Of List");
+
+
             entity.Name = model.Name;
 
             listRepo.Update(entity);
@@ -81,25 +91,30 @@ namespace AllInOne.Services.Implementation.Todo
             return ConvertListToListModel(entity);
         }
 
-        public List<ListModel> GetAllList()
+        public List<ListModel> GetAllList(long userId)
         {
-            return listRepo.Get()
+            return listRepo.GetQuery()
+                .Where(x => x.UserId == userId)
                 .Select(ConvertListToListModel)
                 .ToList();
         }
 
-        public ListModel GetList(long listId)
+        public ListModel GetList(long listId, long userId)
         {
             var entity = listRepo.First(x => x.Id == listId);
             if (entity == null) throw new System.Exception("List Not Exist");
+
+            if (entity.UserId != userId) throw new System.Exception("User Doesn't Owner Of List");
 
             return ConvertListToListModel(entity);
         }
 
-        public bool RemoveListFromGroup(long listId, long groupId)
+        public bool RemoveListFromGroup(long listId, long groupId, long userId)
         {
             var entity = listRepo.First(x => x.Id == listId);
             if (entity == null) throw new System.Exception("List Not Exist");
+
+            if (entity.UserId != userId) throw new System.Exception("User Doesn't Owner Of List");
 
             if (entity.GroupId != groupId) throw new System.Exception("List Doesn't Member Of Group");
 
@@ -119,7 +134,8 @@ namespace AllInOne.Services.Implementation.Todo
                 GroupId = entity.GroupId,
                 GroupName = entity.Group?.Name,
                 Id = entity.Id,
-                Name = entity.Name
+                Name = entity.Name,
+                UserId = entity.UserId
             };
         }
     }

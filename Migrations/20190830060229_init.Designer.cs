@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AllInOne.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190827155012_todoSchema-01")]
-    partial class todoSchema01
+    [Migration("20190830060229_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,28 @@ namespace AllInOne.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("AllInOne.Model.Todo.Group", b =>
+            modelBuilder.Entity("AllInOne.Data.Entity.Security.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("Username");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User","Security");
+                });
+
+            modelBuilder.Entity("AllInOne.Data.Entity.Todo.Group", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,12 +51,16 @@ namespace AllInOne.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<long>("UserId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Group","Todo");
                 });
 
-            modelBuilder.Entity("AllInOne.Model.Todo.List", b =>
+            modelBuilder.Entity("AllInOne.Data.Entity.Todo.List", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,18 +71,35 @@ namespace AllInOne.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<long>("UserId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("List","Todo");
                 });
 
-            modelBuilder.Entity("AllInOne.Model.Todo.List", b =>
+            modelBuilder.Entity("AllInOne.Data.Entity.Todo.Group", b =>
                 {
-                    b.HasOne("AllInOne.Model.Todo.Group", "Group")
+                    b.HasOne("AllInOne.Data.Entity.Security.User", "User")
+                        .WithMany("Groups")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AllInOne.Data.Entity.Todo.List", b =>
+                {
+                    b.HasOne("AllInOne.Data.Entity.Todo.Group", "Group")
                         .WithMany("Lists")
                         .HasForeignKey("GroupId");
+
+                    b.HasOne("AllInOne.Data.Entity.Security.User", "User")
+                        .WithMany("Lists")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

@@ -20,6 +20,9 @@ namespace AllInOne.Controllers
         [HttpPost]
         public GroupModel AddGroup([FromBody] AddGroupModel model)
         {
+            //TODO : fill by current user
+            model.UserId = 1;
+
             var result = groupLib.AddGroup(model);
 
             return result;
@@ -28,6 +31,9 @@ namespace AllInOne.Controllers
         [HttpPut("{groupId}")]
         public GroupModel EditGroup(long groupId, [FromBody] EditGroupModel model)
         {
+            //TODO : fill by current user
+            model.UserId = 1;
+
             model.Id = groupId;
 
             var result = groupLib.EditGroup(model);
@@ -38,7 +44,8 @@ namespace AllInOne.Controllers
         [HttpDelete("{groupId}")]
         public bool DeleteGroup(long groupId)
         {
-            var result = groupLib.DeleteGroup(groupId);
+            //TODO : fill by current user
+            var result = groupLib.DeleteGroup(groupId, 1);
 
             return result;
         }
@@ -46,7 +53,8 @@ namespace AllInOne.Controllers
         [HttpGet("{groupId}")]
         public GroupModel GetGroup(long groupId)
         {
-            var result = groupLib.GetGroup(groupId);
+            //TODO : fill by current user
+            var result = groupLib.GetGroup(groupId, 1);
 
             return result;
         }
@@ -54,7 +62,8 @@ namespace AllInOne.Controllers
         [HttpGet]
         public List<GroupModel> GetAllGroups()
         {
-            var result = groupLib.GetAllGroups();
+            //TODO : fill by current user
+            var result = groupLib.GetAllGroups(1);
 
             return result;
         }

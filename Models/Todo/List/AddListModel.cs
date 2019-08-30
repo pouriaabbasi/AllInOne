@@ -4,5 +4,6 @@ namespace AllInOne.Models.Todo.List
     {
         public string Name { get; set; }
         public long? GroupId { get; set; }
+        public long UserId { get; set; }
     }
 }

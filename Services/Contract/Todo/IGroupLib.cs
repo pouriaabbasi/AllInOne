@@ -7,8 +7,8 @@ namespace AllInOne.Services.Contract.Todo
     {
         GroupModel AddGroup(AddGroupModel model);
         GroupModel EditGroup(EditGroupModel model);
-        bool DeleteGroup(long groupId);
-        GroupModel GetGroup(long groupId);
-        List<GroupModel> GetAllGroups();
+        bool DeleteGroup(long groupId, long userId);
+        GroupModel GetGroup(long groupId, long userId);
+        List<GroupModel> GetAllGroups(long userId);
     }
 }

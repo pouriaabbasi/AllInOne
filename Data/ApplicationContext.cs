@@ -1,3 +1,4 @@
+using AllInOne.Data.Entity.Security;
 using AllInOne.Data.Entity.Todo;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,11 @@ namespace AllInOne.Data
 
         }
 
+        //Todo
         public DbSet<Group> Groups { get; set; }
         public DbSet<List> Lists { get; set; }
+
+        //Security
+        public DbSet<User> Users { get; set; }
     }
 }
