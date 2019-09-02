@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AllInOne.Controllers.Base;
 using AllInOne.Models.Security;
+using AllInOne.Services.Contract.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -11,34 +14,27 @@ namespace AllInOne.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class SecurityLogin : Controller
+    public class SecurityLogin : BaseController
     {
+        private readonly IUserLib userLib;
+
+        public SecurityLogin(IUserLib userLib)
+        {
+            this.userLib = userLib;
+        }
+
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Login([FromBody] LoginModel model)
         {
-            if (model == null)
-                return BadRequest("Invalid client request");
-
-            if (model.Username == "pouria.abbasi" && model.Password == "123")
+            try
             {
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AllInOneDeveloperJwtKey"));
-                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-                var tokenOption = new JwtSecurityToken(
-                    issuer: "https://localhost:5001",
-                    audience: "https://localhost:5001",
-                    claims: new List<Claim>(),
-                    expires: DateTime.Now.AddDays(1),
-                    signingCredentials: signinCredentials
-                );
-
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOption);
-
-                return Ok(new { Token = tokenString });
+                var result = userLib.Login(model);
+                return CustomResult(result);
             }
-            else
+            catch (System.Exception exp)
             {
-                return Unauthorized();
+                return CustomError(exp);
             }
         }
     }

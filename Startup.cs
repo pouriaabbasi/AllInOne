@@ -1,6 +1,8 @@
 using System.Text;
 using AllInOne.Data;
+using AllInOne.Services.Contract.Security;
 using AllInOne.Services.Contract.Todo;
+using AllInOne.Services.Implementation.Security;
 using AllInOne.Services.Implementation.Todo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -63,6 +65,7 @@ namespace AllInOne
             services.AddScoped<IGroupLib, GroupLib>();
             services.AddScoped<IListLib, ListLib>();
             services.AddScoped<IItemLib, ItemLib>();
+            services.AddScoped<IUserLib, UserLib>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
