@@ -1,13 +1,17 @@
 using System.Collections.Generic;
+using AllInOne.Controllers.Base;
 using AllInOne.Models.Todo.Group;
 using AllInOne.Models.Todo.List;
 using AllInOne.Services.Contract.Todo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AllInOne.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class TodoListController : Controller
+    [ApiController]
+    [Authorize]
+    public class TodoListController : BaseController
     {
         private readonly IListLib listLib;
 
@@ -19,74 +23,124 @@ namespace AllInOne.Controllers
         }
 
         [HttpPost]
-        public ListModel AddList([FromBody] AddListModel model)
+        public IActionResult AddList([FromBody] AddListModel model)
         {
-            //TODO : Fill current user
-            model.UserId = 1;
+            try
+            {
+                //TODO : Fill current user
+                model.UserId = 1;
 
-            var result = listLib.AddList(model);
+                var result = listLib.AddList(model);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpPut("{listId}/{groupId}")]
-        public bool AddListToGroup(long listId, long groupId)
+        public IActionResult AddListToGroup(long listId, long groupId)
         {
-            //TODO : Fill current user
+            try
+            {
+                //TODO : Fill current user
 
-            var result = listLib.AddListToGroup(listId, groupId, 1);
+                var result = listLib.AddListToGroup(listId, groupId, 1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpDelete("{listId}")]
-        public bool DeleteList(long listId)
+        public IActionResult DeleteList(long listId)
         {
-            //TODO : Fill current user
+            try
+            {
+                //TODO : Fill current user
 
-            var result = listLib.DeleteList(listId, 1);
+                var result = listLib.DeleteList(listId, 1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpPut("{listId}")]
-        public ListModel EditList(long listId, [FromBody] EditListModel model)
+        public IActionResult EditList(long listId, [FromBody] EditListModel model)
         {
-            //TODO : Fill current user
-            model.UserId = 1;
+            try
+            {
+                //TODO : Fill current user
+                model.UserId = 1;
 
-            model.Id = listId;
+                model.Id = listId;
 
-            var result = listLib.EditList(model);
+                var result = listLib.EditList(model);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpGet]
-        public List<ListModel> GetAllList()
+        public IActionResult GetAllList()
         {
-            //TODO : Fill current user
-            var result = listLib.GetAllList(1);
+            try
+            {
+                //TODO : Fill current user
+                var result = listLib.GetAllList(1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpGet("{listId}")]
-        public ListModel GetList(long listId)
+        public IActionResult GetList(long listId)
         {
-            //TODO : Fill current user
-            var result = listLib.GetList(listId, 1);
+            try
+            {
+                //TODO : Fill current user
+                var result = listLib.GetList(listId, 1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpPut("{listId}/{groupId}")]
-        public bool RemoveListFromGroup(long listId, long groupId)
+        public IActionResult RemoveListFromGroup(long listId, long groupId)
         {
-            //TODO : Fill current user
-            var result = listLib.RemoveListFromGroup(listId, groupId, 1);
+            try
+            {
+                //TODO : Fill current user
+                var result = listLib.RemoveListFromGroup(listId, groupId, 1);
 
-            return result;
+                return CustomResult(result);
+
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
     }
 }

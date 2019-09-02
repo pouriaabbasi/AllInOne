@@ -1,14 +1,18 @@
 using System.Collections.Generic;
+using AllInOne.Controllers.Base;
 using AllInOne.Models.Todo.Group;
 using AllInOne.Models.Todo.Item;
 using AllInOne.Models.Todo.List;
 using AllInOne.Services.Contract.Todo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AllInOne.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class TodoItemController : Controller
+    [ApiController]
+    [Authorize]
+    public class TodoItemController : BaseController
     {
         private readonly IItemLib itemLib;
 
@@ -20,63 +24,105 @@ namespace AllInOne.Controllers
         }
 
         [HttpPost]
-        public ItemModel AddItem([FromBody]AddItemModel model)
+        public IActionResult AddItem([FromBody]AddItemModel model)
         {
-            //TODO: add current user id
-            model.UsesrId = 1;
+            try
+            {
+                //TODO: add current user id
+                model.UsesrId = 1;
 
-            var result = itemLib.AddItem(model);
+                var result = itemLib.AddItem(model);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpPut("{itemId}")]
-        public bool ChangeItemStatus(long itemId)
+        public IActionResult ChangeItemStatus(long itemId)
         {
-            //todo: add current user id
-            var result = itemLib.ChangeItemStatus(itemId, 1);
+            try
+            {
+                //todo: add current user id
+                var result = itemLib.ChangeItemStatus(itemId, 1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpDelete("{itemId}")]
-        public bool DeleteItem(long itemId)
+        public IActionResult DeleteItem(long itemId)
         {
-            //todo: add current user id
-            var result = itemLib.DeleteItem(itemId, 1);
+            try
+            {
+                //todo: add current user id
+                var result = itemLib.DeleteItem(itemId, 1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpPut("{itemId}")]
-        public ItemModel EditItem(long itemId, [FromBody] EditItemModel model)
+        public IActionResult EditItem(long itemId, [FromBody] EditItemModel model)
         {
-            //todo: add current user id
-            model.UserId = 1;
+            try
+            {
+                //todo: add current user id
+                model.UserId = 1;
 
-            model.Id = itemId;
+                model.Id = itemId;
 
-            var result = itemLib.EditItem(model);
+                var result = itemLib.EditItem(model);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpGet]
-        public List<ItemModel> GetAllItems()
+        public IActionResult GetAllItems()
         {
-            //todo: add current user id
-            var result = itemLib.GetAllItems(1);
+            try
+            {
+                //todo: add current user id
+                var result = itemLib.GetAllItems(1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpGet("{itemId}")]
-        public ItemModel GetItem(long itemId)
+        public IActionResult GetItem(long itemId)
         {
-            //todo: add current user id
-            var result = itemLib.GetItem(itemId, 1);
+            try
+            {
+                //todo: add current user id
+                var result = itemLib.GetItem(itemId, 1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
     }
 }

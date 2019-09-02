@@ -1,12 +1,16 @@
 using System.Collections.Generic;
+using AllInOne.Controllers.Base;
 using AllInOne.Models.Todo.Group;
 using AllInOne.Services.Contract.Todo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AllInOne.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class TodoGroupController : Controller
+    [ApiController]
+    [Authorize]
+    public class TodoGroupController : BaseController
     {
         private readonly IGroupLib groupLib;
 
@@ -18,14 +22,21 @@ namespace AllInOne.Controllers
         }
 
         [HttpPost]
-        public GroupModel AddGroup([FromBody] AddGroupModel model)
+        public IActionResult AddGroup([FromBody] AddGroupModel model)
         {
-            //TODO : fill by current user
-            model.UserId = 1;
+            try
+            {
+                //TODO : fill by current user
+                model.UserId = 1;
 
-            var result = groupLib.AddGroup(model);
+                var result = groupLib.AddGroup(model);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpPut("{groupId}")]
@@ -42,30 +53,52 @@ namespace AllInOne.Controllers
         }
 
         [HttpDelete("{groupId}")]
-        public bool DeleteGroup(long groupId)
+        public IActionResult DeleteGroup(long groupId)
         {
-            //TODO : fill by current user
-            var result = groupLib.DeleteGroup(groupId, 1);
+            try
+            {
+                //TODO : fill by current user
+                var result = groupLib.DeleteGroup(groupId, 1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
 
         [HttpGet("{groupId}")]
-        public GroupModel GetGroup(long groupId)
+        public IActionResult GetGroup(long groupId)
         {
-            //TODO : fill by current user
-            var result = groupLib.GetGroup(groupId, 1);
+            try
+            {
+                //TODO : fill by current user
+                var result = groupLib.GetGroup(groupId, 1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+
         }
 
         [HttpGet]
-        public List<GroupModel> GetAllGroups()
+        public IActionResult GetAllGroups()
         {
-            //TODO : fill by current user
-            var result = groupLib.GetAllGroups(1);
+            try
+            {
+                //TODO : fill by current user
+                var result = groupLib.GetAllGroups(1);
 
-            return result;
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
         }
     }
 }
