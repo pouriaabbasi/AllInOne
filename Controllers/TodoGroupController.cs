@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using AllInOne.Controllers.Base;
 using AllInOne.Models.Todo.Group;
 using AllInOne.Services.Contract.Todo;
@@ -26,8 +25,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : fill by current user
-                model.UserId = 1;
+                model.UserId = CurrentUserId;
 
                 var result = groupLib.AddGroup(model);
 
@@ -42,8 +40,7 @@ namespace AllInOne.Controllers
         [HttpPut("{groupId}")]
         public GroupModel EditGroup(long groupId, [FromBody] EditGroupModel model)
         {
-            //TODO : fill by current user
-            model.UserId = 1;
+            model.UserId = CurrentUserId;
 
             model.Id = groupId;
 
@@ -57,8 +54,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : fill by current user
-                var result = groupLib.DeleteGroup(groupId, 1);
+                var result = groupLib.DeleteGroup(groupId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -73,8 +69,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : fill by current user
-                var result = groupLib.GetGroup(groupId, 1);
+                var result = groupLib.GetGroup(groupId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -90,8 +85,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : fill by current user
-                var result = groupLib.GetAllGroups(1);
+                var result = groupLib.GetAllGroups(CurrentUserId);
 
                 return CustomResult(result);
             }

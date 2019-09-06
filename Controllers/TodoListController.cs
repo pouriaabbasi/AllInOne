@@ -27,8 +27,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : Fill current user
-                model.UserId = 1;
+                model.UserId = CurrentUserId;
 
                 var result = listLib.AddList(model);
 
@@ -45,9 +44,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : Fill current user
-
-                var result = listLib.AddListToGroup(listId, groupId, 1);
+                var result = listLib.AddListToGroup(listId, groupId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -62,9 +59,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : Fill current user
-
-                var result = listLib.DeleteList(listId, 1);
+                var result = listLib.DeleteList(listId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -79,8 +74,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : Fill current user
-                model.UserId = 1;
+                model.UserId = CurrentUserId;
 
                 model.Id = listId;
 
@@ -99,8 +93,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : Fill current user
-                var result = listLib.GetAllList(1);
+                var result = listLib.GetAllList(CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -115,8 +108,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : Fill current user
-                var result = listLib.GetList(listId, 1);
+                var result = listLib.GetList(listId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -131,8 +123,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO : Fill current user
-                var result = listLib.RemoveListFromGroup(listId, groupId, 1);
+                var result = listLib.RemoveListFromGroup(listId, groupId, CurrentUserId);
 
                 return CustomResult(result);
 

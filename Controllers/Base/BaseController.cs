@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -8,6 +10,24 @@ namespace AllInOne.Controllers.Base
 {
     public class BaseController : Controller
     {
+        protected long CurrentUserId
+        {
+            get
+            {
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                if (identity == null) return 0;
+                if (identity.Claims == null) return 0;
+                var claim = identity.Claims;
+                var userIdClaim = claim
+                    .Where(x => x.Type == ClaimTypes.Sid)
+                    .FirstOrDefault();
+                if (userIdClaim == null) return 0;
+                if (string.IsNullOrEmpty(userIdClaim.Value)) return 0;
+
+                return Convert.ToInt64(userIdClaim.Value);
+            }
+        }
+
         protected IActionResult CustomResult(object result = null, string message = null)
         {
             return Ok(new

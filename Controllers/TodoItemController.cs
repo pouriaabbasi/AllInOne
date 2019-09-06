@@ -28,8 +28,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //TODO: add current user id
-                model.UsesrId = 1;
+                model.UsesrId = CurrentUserId;
 
                 var result = itemLib.AddItem(model);
 
@@ -46,8 +45,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //todo: add current user id
-                var result = itemLib.ChangeItemStatus(itemId, 1);
+                var result = itemLib.ChangeItemStatus(itemId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -62,8 +60,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //todo: add current user id
-                var result = itemLib.DeleteItem(itemId, 1);
+                var result = itemLib.DeleteItem(itemId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -78,8 +75,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //todo: add current user id
-                model.UserId = 1;
+                model.UserId = CurrentUserId;
 
                 model.Id = itemId;
 
@@ -98,8 +94,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //todo: add current user id
-                var result = itemLib.GetAllItems(1);
+                var result = itemLib.GetAllItems(CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -114,8 +109,7 @@ namespace AllInOne.Controllers
         {
             try
             {
-                //todo: add current user id
-                var result = itemLib.GetItem(itemId, 1);
+                var result = itemLib.GetItem(itemId, CurrentUserId);
 
                 return CustomResult(result);
             }
