@@ -6,6 +6,8 @@ using AllInOne.Data;
 using AllInOne.Data.Entity.Security;
 using AllInOne.Models.Security;
 using AllInOne.Services.Contract.Security;
+using AllInOne.Services.Helpers;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AllInOne.Services.Implementation.Security
@@ -14,11 +16,14 @@ namespace AllInOne.Services.Implementation.Security
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IRepository<User> userRepo;
+        private readonly AppSettings appSettings;
 
         public UserLib(
             IUnitOfWork unitOfWork, 
-            IRepository<User> userRepo)
+            IRepository<User> userRepo,
+            IOptions<AppSettings> appSettings)
         {
+            this.appSettings = appSettings.Value;
             this.unitOfWork = unitOfWork;
             this.userRepo = userRepo;
         }
@@ -32,7 +37,7 @@ namespace AllInOne.Services.Implementation.Security
             if (user == null) throw new Exception("Username or Password is not valid");
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("AllInOneDeveloperJwtKey");
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]{
