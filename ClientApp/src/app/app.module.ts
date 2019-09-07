@@ -14,6 +14,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './gaurds/auth.guard';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { TodoComponent } from './pages/todo/todo.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
     ControlSidebarComponent,
     FooterComponent,
     AppLayoutComponent,
-    LoginComponent
+    LoginComponent,
+    TodoComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -32,10 +34,11 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
     RouterModule.forRoot([
       {
         path: '',
-        pathMatch: 'full',
         canActivate: [AuthGuard],
         component: AppLayoutComponent,
-        children: []
+        children: [
+          { path: 'todo', component: TodoComponent }
+        ]
       },
       { path: 'login', component: LoginComponent },
     ])

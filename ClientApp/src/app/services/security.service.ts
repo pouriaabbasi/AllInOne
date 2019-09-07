@@ -41,8 +41,4 @@ export class SecurityService extends BaseService {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
-
-  public test() {
-    return 'test1';
-  }
 }

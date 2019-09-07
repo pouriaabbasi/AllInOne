@@ -1,0 +1,17 @@
+<section class="content-header">
+  <div class="container-fluid">
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="input-group" *ngFor="let item of items">
+      <div class="input-group-prepend">
+        <span class="input-group-text">
+          <input type="checkbox">
+        </span>
+      </div>
+      <input type="text" class="form-control" [(ngModel)]="item.name">
+    </div>
+  </div>
+</section>
