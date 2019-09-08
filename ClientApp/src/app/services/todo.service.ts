@@ -22,4 +22,12 @@ export class TodoService extends BaseService {
   public addItem(model: AddItemModel): Observable<ItemModel> {
     return super.post('TodoItem/AddItem', model);
   }
+
+  public changeItemStatus(itemId: number): Observable<boolean> {
+    return super.put('TodoItem/ChangeItemStatus/' + itemId.toString(), null);
+  }
+
+  public deleteItem(itemId: number): Observable<boolean> {
+    return super.delete('TodoItem/DeleteItem/' + itemId.toString());
+  }
 }

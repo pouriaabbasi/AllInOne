@@ -30,6 +30,24 @@ export class TodoComponent implements OnInit {
       });
   }
 
+  public changeItemStatus(itemId: number) {
+    this.todoService.changeItemStatus(itemId)
+      .subscribe(result => {
+        if (result) {
+          this.fetchData();
+        }
+      });
+  }
+
+  public deleteItem(itemId: number) {
+    this.todoService.deleteItem(itemId)
+      .subscribe(result => {
+        if (result) {
+          this.fetchData();
+        }
+      });
+  }
+
   private fetchData() {
     this.todoService.getAllItems()
       .subscribe(result => {
