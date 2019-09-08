@@ -16,3 +16,8 @@ export class ItemModel {
     completedDate: Date;
     createDate: Date;
 }
+
+export class AddItemModel {
+    name: string;
+    listId: number;
+}

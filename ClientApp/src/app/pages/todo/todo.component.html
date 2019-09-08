@@ -1,5 +1,11 @@
 <section class="content-header">
   <div class="container-fluid">
+    <div class="input-group">
+      <input type="text" class="form-control" [(ngModel)]="newItemModel.name">
+      <span class="input-group-append">
+        <button type="button" class="btn btn-info btn-flat" (click)="addItem()">Add Item</button>
+      </span>
+    </div>
   </div>
 </section>
 
@@ -8,7 +14,7 @@
     <div class="input-group" *ngFor="let item of items">
       <div class="input-group-prepend">
         <span class="input-group-text">
-          <input type="checkbox">
+          <input type="checkbox" [(ngModel)]="item.completed">
         </span>
       </div>
       <input type="text" class="form-control" [(ngModel)]="item.name">
