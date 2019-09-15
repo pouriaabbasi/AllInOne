@@ -34,7 +34,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             listRepo.Add(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return ConvertListToListModel(entity);
         }
@@ -55,7 +55,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             listRepo.Update(listEntity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return true;
         }
@@ -69,7 +69,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             listRepo.Delete(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return true;
         }
@@ -86,7 +86,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             listRepo.Update(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return ConvertListToListModel(entity);
         }
@@ -122,7 +122,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             listRepo.Update(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return true;
         }

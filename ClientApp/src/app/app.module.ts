@@ -15,6 +15,7 @@ import { AuthGuard } from './gaurds/auth.guard';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { TodoComponent } from './pages/todo/todo.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { TodoComponent } from './pages/todo/todo.component';
     FooterComponent,
     AppLayoutComponent,
     LoginComponent,
-    TodoComponent
+    TodoComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -41,6 +43,7 @@ import { TodoComponent } from './pages/todo/todo.component';
         ]
       },
       { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
     ])
   ],
   providers: [

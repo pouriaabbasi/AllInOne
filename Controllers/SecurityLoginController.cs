@@ -1,24 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using AllInOne.Controllers.Base;
 using AllInOne.Models.Security;
 using AllInOne.Services.Contract.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace AllInOne.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class SecurityLogin : BaseController
+    [Authorize]
+    public class SecurityLoginController : BaseController
     {
         private readonly IUserLib userLib;
 
-        public SecurityLogin(IUserLib userLib)
+        public SecurityLoginController(IUserLib userLib)
         {
             this.userLib = userLib;
         }
@@ -30,6 +25,21 @@ namespace AllInOne.Controllers
             try
             {
                 var result = userLib.Login(model);
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult Register([FromBody] RegisterModel model)
+        {
+            try
+            {
+                var result = userLib.Register(model);
                 return CustomResult(result);
             }
             catch (System.Exception exp)

@@ -11,7 +11,7 @@ namespace AllInOne.Data
             Context = context;
         }
 
-        public void commit()
+        public void Commit()
         {
             Context.SaveChanges();
         }

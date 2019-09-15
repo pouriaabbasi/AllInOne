@@ -6,6 +6,6 @@ namespace AllInOne.Data
     public interface IUnitOfWork : IDisposable
     {
         DbContext Context { get; }
-        void commit();
+        void Commit();
     }
 }

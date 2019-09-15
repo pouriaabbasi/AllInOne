@@ -31,7 +31,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             groupRepo.Add(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return ConverGroupToGroupModel(entity);
         }
@@ -47,7 +47,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             groupRepo.Update(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return ConverGroupToGroupModel(entity);
         }
@@ -61,7 +61,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             groupRepo.Delete(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return true;
         }

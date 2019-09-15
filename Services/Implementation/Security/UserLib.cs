@@ -19,7 +19,7 @@ namespace AllInOne.Services.Implementation.Security
         private readonly AppSettings appSettings;
 
         public UserLib(
-            IUnitOfWork unitOfWork, 
+            IUnitOfWork unitOfWork,
             IRepository<User> userRepo,
             IOptions<AppSettings> appSettings)
         {
@@ -30,9 +30,10 @@ namespace AllInOne.Services.Implementation.Security
 
         public UserModel Login(LoginModel model)
         {
+            var password = model.Password.HashPassword(model.Username);
             var user = userRepo.First(x =>
                 x.Username == model.Username
-                && x.Password == model.Password);
+                && x.Password == password);
 
             if (user == null) throw new Exception("Username or Password is not valid");
 
@@ -57,6 +58,24 @@ namespace AllInOne.Services.Implementation.Security
                 Username = user.Username,
                 Token = tokenHandler.WriteToken(token)
             };
+        }
+
+        public bool Register(RegisterModel model)
+        {
+            var userEntity = new User
+            {
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Username = model.Username,
+                Password = model.Password.HashPassword(model.Username)
+            };
+
+            userRepo.Add(userEntity);
+
+            unitOfWork.Commit();
+
+            return true;
         }
     }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UserModel, LoginModel } from '../models/security.model';
+import { UserModel, LoginModel, RegisterModel } from '../models/security.model';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base/base.service';
 
@@ -34,6 +34,10 @@ export class SecurityService extends BaseService {
           }
           return user;
         }));
+  }
+
+  public register(model: RegisterModel): Observable<boolean> {
+    return super.post<boolean>('SecurityLogin/Register', model);
   }
 
   public logout() {

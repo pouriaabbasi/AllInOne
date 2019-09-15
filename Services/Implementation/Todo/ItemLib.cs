@@ -33,7 +33,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             itemRepo.Add(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return ConvertItemToItemModel(entity);
         }
@@ -53,7 +53,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             itemRepo.Update(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return true;
         }
@@ -67,7 +67,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             itemRepo.Delete(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return true;
         }
@@ -83,7 +83,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             itemRepo.Update(entity);
 
-            unitOfWork.commit();
+            unitOfWork.Commit();
 
             return ConvertItemToItemModel(entity);
         }
