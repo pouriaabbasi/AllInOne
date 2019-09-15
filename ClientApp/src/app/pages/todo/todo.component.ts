@@ -51,7 +51,6 @@ export class TodoComponent implements OnInit {
   private fetchData() {
     this.todoService.getAllItems()
       .subscribe(result => {
-        console.log(result);
         this.items = result;
         this.newItemModel = new AddItemModel();
       });
