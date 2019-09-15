@@ -21,3 +21,18 @@ export class AddItemModel {
     name: string;
     listId: number;
 }
+
+export class TodoMenu {
+    groups: Array<TodoGroupModel>;
+    lists: Array<TodoListModel>;
+}
+
+export class TodoGroupModel {
+    name: string;
+    lists: Array<TodoListModel>;
+}
+
+export class TodoListModel {
+    id: number;
+    name: string;
+}

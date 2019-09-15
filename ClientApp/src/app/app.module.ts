@@ -39,7 +39,7 @@ import { RegisterComponent } from './pages/register/register.component';
         canActivate: [AuthGuard],
         component: AppLayoutComponent,
         children: [
-          { path: 'todo', component: TodoComponent }
+          { path: 'todo/:id', component: TodoComponent }
         ]
       },
       { path: 'login', component: LoginComponent },

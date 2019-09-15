@@ -30,16 +30,19 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
-            <a routerLink='/todo' class="nav-link" routerLinkActive='active'>
+            <a [routerLink]="['/todo', 0]" routerLinkActive="router-link-active" class="nav-link"
+              routerLinkActive='active'>
 
               <i class="far fa-calendar nav-icon"></i>
-              <p>Today</p>
+              <p>Todo</p>
             </a>
           </ul>
-          <ul class="nav nav-treeview">
-            <a routerLink='/' class="nav-link">
-              <i class="fas fa-tools nav-icon"></i>
-              <p>Setting</p>
+          <ul class="nav nav-treeview" *ngFor="let list of todoMenu.lists">
+            <a [routerLink]="['/todo', list.id]" routerLinkActive="router-link-active" class="nav-link"
+              routerLinkActive='active'>
+
+              <i class="far fa-calendar nav-icon"></i>
+              <p>{{list.name}}</p>
             </a>
           </ul>
         </li>

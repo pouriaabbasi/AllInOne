@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TodoService } from 'src/app/services/todo.service';
 import { ItemModel, AddItemModel } from 'src/app/models/todo.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-todo',
@@ -10,6 +11,8 @@ import { ItemModel, AddItemModel } from 'src/app/models/todo.model';
 export class TodoComponent implements OnInit {
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private todoService: TodoService
   ) { }
 
@@ -21,13 +24,16 @@ export class TodoComponent implements OnInit {
   }
 
   public addItem() {
-    this.newItemModel.listId = null;
-    this.todoService.addItem(this.newItemModel)
-      .subscribe(result => {
-        if (result) {
-          this.fetchData();
-        }
-      });
+    this.route.paramMap.subscribe(params => {
+      const listId = params.get('id');
+      this.newItemModel.listId = listId === '0' ? null : Number(listId);
+      this.todoService.addItem(this.newItemModel)
+        .subscribe(result => {
+          if (result) {
+            this.fetchData();
+          }
+        });
+    });
   }
 
   public changeItemStatus(itemId: number) {
@@ -49,10 +55,21 @@ export class TodoComponent implements OnInit {
   }
 
   private fetchData() {
-    this.todoService.getAllItems()
-      .subscribe(result => {
-        this.items = result;
-        this.newItemModel = new AddItemModel();
-      });
+    this.route.paramMap.subscribe(params => {
+      const listId = params.get('id');
+      if (listId !== '0') {
+        this.todoService.getListItems(listId)
+          .subscribe(result => {
+            this.items = result;
+            this.newItemModel = new AddItemModel();
+          });
+      } else {
+        this.todoService.getOrphanItems()
+          .subscribe(result => {
+            this.items = result;
+            this.newItemModel = new AddItemModel();
+          });
+      }
+    });
   }
 }

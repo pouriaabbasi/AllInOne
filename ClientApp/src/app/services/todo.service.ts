@@ -19,6 +19,14 @@ export class TodoService extends BaseService {
     return super.get('TodoItem/GetAllItems');
   }
 
+  public getListItems(listId: string): Observable<ItemModel[]> {
+    return super.get(`TodoItem/GetListItems/${listId}`);
+  }
+
+  public getOrphanItems(): Observable<ItemModel[]> {
+    return super.get('TodoItem/GetOrphanItems');
+  }
+
   public addItem(model: AddItemModel): Observable<ItemModel> {
     return super.post('TodoItem/AddItem', model);
   }

@@ -12,13 +12,16 @@ namespace AllInOne.Services.Implementation.Todo
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IRepository<Item> itemRepo;
+        private readonly IRepository<List> listRepo;
 
         public ItemLib(
             IUnitOfWork unitOfWork,
-            IRepository<Item> itemRepo)
+            IRepository<Item> itemRepo,
+            IRepository<List> listRepo)
         {
             this.unitOfWork = unitOfWork;
             this.itemRepo = itemRepo;
+            this.listRepo = listRepo;
         }
 
         public ItemModel AddItem(AddItemModel model)
@@ -92,8 +95,8 @@ namespace AllInOne.Services.Implementation.Todo
         {
             return itemRepo.GetQuery()
                 .Where(x => x.UserId == userId)
-                .OrderBy(x=>x.Completed)
-                .ThenByDescending(x=>x.CreatedDate)
+                .OrderBy(x => x.Completed)
+                .ThenByDescending(x => x.CreatedDate)
                 .Select(ConvertItemToItemModel)
                 .ToList();
         }
@@ -106,6 +109,36 @@ namespace AllInOne.Services.Implementation.Todo
             if (entity.UserId != userId) throw new Exception("User Doesn't Owner Of Item");
 
             return ConvertItemToItemModel(entity);
+        }
+
+        public List<ItemModel> GetListItems(long userId, long listId)
+        {
+            var isOwner = listRepo.GetQuery()
+                .Any(x =>
+                    x.Id == listId
+                    && x.UserId == userId);
+            if (!isOwner) throw new Exception("You can only access to your lists!");
+
+            return itemRepo.GetQuery()
+                .Where(x =>
+                    x.ListId == listId
+                    && x.UserId == userId)
+                .OrderBy(x => x.Completed)
+                .ThenByDescending(x => x.CreatedDate)
+                .Select(ConvertItemToItemModel)
+                .ToList();
+        }
+
+        public List<ItemModel> GetOrphanItems(long userId)
+        {
+            return itemRepo.GetQuery()
+                .Where(x =>
+                    x.UserId == userId
+                    && x.ListId == null)
+                .OrderBy(x => x.Completed)
+                .ThenByDescending(x => x.CreatedDate)
+                .Select(ConvertItemToItemModel)
+                .ToList();
         }
 
         private ItemModel ConvertItemToItemModel(Item entity)

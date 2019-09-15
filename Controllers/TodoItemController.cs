@@ -118,5 +118,35 @@ namespace AllInOne.Controllers
                 return CustomError(exp);
             }
         }
+
+        [HttpGet("{listId}")]
+        public IActionResult GetListItems(long listId)
+        {
+            try
+            {
+                var result = itemLib.GetListItems(CurrentUserId, listId);
+
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetOrphanItems()
+        {
+            try
+            {
+                var result = itemLib.GetOrphanItems(CurrentUserId);
+
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
     }
 }
