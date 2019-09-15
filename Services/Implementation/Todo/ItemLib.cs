@@ -92,6 +92,8 @@ namespace AllInOne.Services.Implementation.Todo
         {
             return itemRepo.GetQuery()
                 .Where(x => x.UserId == userId)
+                .OrderBy(x=>x.Completed)
+                .ThenByDescending(x=>x.CreatedDate)
                 .Select(ConvertItemToItemModel)
                 .ToList();
         }
