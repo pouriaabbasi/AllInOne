@@ -27,7 +27,8 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css",
               "src/assets/plugins/fontawesome-free/css/all.min.css",
-              "src/assets/dist/css/adminlte.min.css"
+              "src/assets/dist/css/adminlte.min.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "src/assets/plugins/jquery/jquery.min.js",

@@ -17,6 +17,11 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { TodoComponent } from './pages/todo/todo.component';
 import { RegisterComponent } from './pages/register/register.component';
 
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { BaseComponent } from './pages/base/base.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +32,8 @@ import { RegisterComponent } from './pages/register/register.component';
     AppLayoutComponent,
     LoginComponent,
     TodoComponent,
-    RegisterComponent
+    RegisterComponent,
+    BaseComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -44,7 +50,10 @@ import { RegisterComponent } from './pages/register/register.component';
       },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
-    ])
+    ]),
+    CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

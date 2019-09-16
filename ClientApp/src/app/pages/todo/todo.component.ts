@@ -2,18 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { TodoService } from 'src/app/services/todo.service';
 import { ItemModel, AddItemModel } from 'src/app/models/todo.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BaseComponent } from '../base/base.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.css']
 })
-export class TodoComponent implements OnInit {
+export class TodoComponent extends BaseComponent implements OnInit {
 
   constructor(
+    protected toastr: ToastrService,
     private route: ActivatedRoute,
     private todoService: TodoService
-  ) { }
+  ) {
+    super(toastr);
+  }
 
   items: ItemModel[] = [];
   newItemModel: AddItemModel = new AddItemModel();
@@ -29,6 +34,7 @@ export class TodoComponent implements OnInit {
       this.todoService.addItem(this.newItemModel)
         .subscribe(result => {
           if (result) {
+            this.showSuccess('Add Item', 'Your item was added');
             this.fetchData();
           }
         });
@@ -48,17 +54,17 @@ export class TodoComponent implements OnInit {
     this.todoService.deleteItem(itemId)
       .subscribe(result => {
         if (result) {
+          this.showSuccess('Delete Item', 'Your item was deleted');
           this.fetchData();
         }
       });
   }
 
   public editItem(itemId: number, itemName: string) {
-    console.log('called');
     this.todoService.editItem(itemId, itemName)
       .subscribe(result => {
-        console.log(result);
         if (result) {
+          this.showSuccess('Edit Item', 'Your item was edited');
           this.fetchData();
         }
       });
