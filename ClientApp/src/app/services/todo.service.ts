@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base/base.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ItemModel, AddItemModel } from '../models/todo.model';
+import { ItemModel, AddItemModel, TodoListModel } from '../models/todo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,10 @@ export class TodoService extends BaseService {
     return super.get(`TodoItem/GetListItems/${listId}`);
   }
 
+  public getLists(): Observable<TodoListModel[]> {
+    return super.get('TodoList/GetAllList');
+  }
+
   public getOrphanItems(): Observable<ItemModel[]> {
     return super.get('TodoItem/GetOrphanItems');
   }
@@ -37,5 +41,13 @@ export class TodoService extends BaseService {
 
   public deleteItem(itemId: number): Observable<boolean> {
     return super.delete('TodoItem/DeleteItem/' + itemId.toString());
+  }
+
+  public addList(listName: string): Observable<TodoListModel> {
+    return super.post('TodoList/AddList', { name: listName });
+  }
+
+  public removeList(listId: number): Observable<boolean> {
+    return super.delete(`TodoList/DeleteList/${listId}`);
   }
 }

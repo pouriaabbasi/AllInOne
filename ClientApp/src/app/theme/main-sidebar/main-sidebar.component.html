@@ -1,14 +1,12 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-  <!-- Brand Logo -->
+
   <a class="brand-link" routerLink='/'>
     <img src="../assets/dist/img/AdminLTELogo.png" alt="All In One Logo" class="brand-image img-circle elevation-3"
       style="opacity: .8">
     <span class="brand-text font-weight-light">All In One</span>
   </a>
 
-  <!-- Sidebar -->
   <div class="sidebar">
-    <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
         <img src="../assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
@@ -18,7 +16,6 @@
       </div>
     </div>
 
-    <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <li class="nav-item has-treeview">
@@ -38,17 +35,29 @@
             </a>
           </ul>
           <ul class="nav nav-treeview" *ngFor="let list of todoMenu.lists">
-            <a [routerLink]="['/todo', list.id]" routerLinkActive="router-link-active" class="nav-link"
-              routerLinkActive='active'>
-
-              <i class="far fa-calendar nav-icon"></i>
-              <p>{{list.name}}</p>
-            </a>
+            <div class="row">
+              <div class="col col-sm-9">
+                <a [routerLink]="['/todo', list.id]" routerLinkActive="router-link-active" class="nav-link"
+                  routerLinkActive='active'>
+                  <i class="far fa-calendar nav-icon"></i>
+                  <p>{{list.name}}</p>
+                </a>
+              </div>
+              <div class="col col-sm-1">
+                <button type="button" class="btn btn-outline-danger" (click)="removeList(list.id)">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+          </ul>
+          <ul class="nav nav-treeview">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="new list" (keyup.enter)="addNewList()"
+                [(ngModel)]="newListName">
+            </div>
           </ul>
         </li>
       </ul>
     </nav>
-    <!-- /.sidebar-menu -->
   </div>
-  <!-- /.sidebar -->
 </aside>
