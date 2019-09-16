@@ -12,7 +12,6 @@ export class TodoComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private todoService: TodoService
   ) { }
 
@@ -48,6 +47,17 @@ export class TodoComponent implements OnInit {
   public deleteItem(itemId: number) {
     this.todoService.deleteItem(itemId)
       .subscribe(result => {
+        if (result) {
+          this.fetchData();
+        }
+      });
+  }
+
+  public editItem(itemId: number, itemName: string) {
+    console.log('called');
+    this.todoService.editItem(itemId, itemName)
+      .subscribe(result => {
+        console.log(result);
         if (result) {
           this.fetchData();
         }

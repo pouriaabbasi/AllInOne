@@ -50,4 +50,8 @@ export class TodoService extends BaseService {
   public removeList(listId: number): Observable<boolean> {
     return super.delete(`TodoList/DeleteList/${listId}`);
   }
+
+  public editItem(itemId: number, itemName: string): Observable<ItemModel> {
+    return super.put(`TodoItem/EditItem/${itemId}`, { name: itemName });
+  }
 }
