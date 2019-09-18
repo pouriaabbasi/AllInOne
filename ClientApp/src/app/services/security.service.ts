@@ -21,6 +21,9 @@ export class SecurityService extends BaseService {
   }
 
   public get currentUserValue(): UserModel {
+    if (this.currentUserSubject == null) {
+      return null;
+    }
     return this.currentUserSubject.value;
   }
 
