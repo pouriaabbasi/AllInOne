@@ -7,6 +7,9 @@ import { MainHeaderComponent } from './_components/main-header/main-header.compo
 import { MainSidebarComponent } from './_components/main-sidebar/main-sidebar.component';
 import { MainFooterComponent } from './_components/main-footer/main-footer.component';
 import { ControlSidebarComponent } from './_components/control-sidebar/control-sidebar.component';
+import { LoginComponent } from './pages/login/login.component';
+import { NoneLayoutComponent } from './_layouts/none-layout/none-layout.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 @NgModule({
   declarations: [
@@ -14,13 +17,16 @@ import { ControlSidebarComponent } from './_components/control-sidebar/control-s
     MainHeaderComponent,
     MainSidebarComponent,
     MainFooterComponent,
-    ControlSidebarComponent
+    ControlSidebarComponent,
+    LoginComponent,
+    NoneLayoutComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule
   ],
   providers: [],
-  bootstrap: [AppLayoutComponent]
+  bootstrap: [NoneLayoutComponent]
 })
 export class AppModule { }
