@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SecurityService } from 'src/app/services/security.service';
 
 @Component({
   selector: 'app-main-header',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainHeaderComponent implements OnInit {
 
-  constructor() { }
+  fullName = '';
+
+  constructor(
+    private securityService: SecurityService
+  ) { }
 
   ngOnInit() {
+    this.fullName = `${this.securityService.currentUserValue.firstName} ${this.securityService.currentUserValue.lastName}`;
   }
 
 }
