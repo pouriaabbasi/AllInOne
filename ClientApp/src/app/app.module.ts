@@ -10,6 +10,8 @@ import { ControlSidebarComponent } from './_components/control-sidebar/control-s
 import { LoginComponent } from './pages/login/login.component';
 import { NoneLayoutComponent } from './_layouts/none-layout/none-layout.component';
 import { RegisterComponent } from './pages/register/register.component';
+import {HttpClientModule} from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { RegisterComponent } from './pages/register/register.component';
     RegisterComponent
   ],
   imports: [
+    HttpClientModule,
+    FormsModule,
     BrowserModule,
     AppRoutingModule
   ],
