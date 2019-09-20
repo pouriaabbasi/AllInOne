@@ -1,7 +1,5 @@
 <!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
-
-    <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
 
         <!-- Sidebar user panel (optional) -->
@@ -31,23 +29,41 @@
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">HEADER</li>
-            <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-            <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
             <li class="treeview">
-                <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+                <a href="#"><i class="fa fa-tasks"></i> <span>Todo</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#">Link in level 2</a></li>
-                    <li><a href="#">Link in level 2</a></li>
+                    <li>
+                        <a [routerLink]="['/todo', 0]">
+                            <i class="fa fa-list-ul"></i>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+                    <li *ngFor="let list of todoMenu.lists">
+                        <div class="input-group">
+                            <a [routerLink]="['/todo', list.id]">
+                                <i class="fa fa-calendar-plus-o"></i>
+                                <span>{{list.name}}</span>
+                            </a>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-xs btn-danger" (click)="removeList(list.id)">
+                                    <i class="fa fa-remove"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="new list" (keyup.enter)="addNewList()"
+                                [(ngModel)]="newListName">
+                        </div>
+                    </li>
                 </ul>
             </li>
         </ul>
         <!-- /.sidebar-menu -->
     </section>
-    <!-- /.sidebar -->
 </aside>

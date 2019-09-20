@@ -10,8 +10,11 @@ import { ControlSidebarComponent } from './_components/control-sidebar/control-s
 import { LoginComponent } from './pages/login/login.component';
 import { NoneLayoutComponent } from './_layouts/none-layout/none-layout.component';
 import { RegisterComponent } from './pages/register/register.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { TodoComponent } from './pages/todo/todo.component';
+import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { ErrorInterceptor } from './_helpers/error.interceptor';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,8 @@ import { FormsModule } from '@angular/forms';
     ControlSidebarComponent,
     LoginComponent,
     NoneLayoutComponent,
-    RegisterComponent
+    RegisterComponent,
+    TodoComponent
   ],
   imports: [
     HttpClientModule,
@@ -30,7 +34,10 @@ import { FormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  ],
   bootstrap: [NoneLayoutComponent]
 })
 export class AppModule { }

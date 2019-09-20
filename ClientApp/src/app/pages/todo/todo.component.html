@@ -1,0 +1,21 @@
+<section class="content-header">
+
+</section>
+<section class="content">
+    <div class="input-group" *ngFor="let item of items" style="margin: 3px">
+        <span class="input-group-addon">
+            <input type="checkbox" [(ngModel)]="item.completed" (change)="changeItemStatus(item.id)">
+        </span>
+        <input type="text" class="form-control" [(ngModel)]="item.name" [ngClass]="{compeleted: item.completed}"
+            (keyup.enter)="editItem(item.id, item.name)">
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-danger" (click)="deleteItem(item.id)">
+                <i class="fa fa-remove"></i>
+            </button>
+        </span>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" [(ngModel)]="newItemModel.name" (keyup.enter)="addItem()"
+            placeholder="new item">
+    </div>
+</section>
