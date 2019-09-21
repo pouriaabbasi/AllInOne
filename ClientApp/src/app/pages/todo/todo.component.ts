@@ -12,6 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class TodoComponent extends BaseComponent implements OnInit {
 
+  listName = '';
+
   constructor(
     protected toastr: ToastrService,
     private route: ActivatedRoute,
@@ -24,6 +26,7 @@ export class TodoComponent extends BaseComponent implements OnInit {
   newItemModel: AddItemModel = new AddItemModel();
 
   ngOnInit() {
+    this.getListInfo();
     this.fetchData();
   }
 
@@ -86,6 +89,22 @@ export class TodoComponent extends BaseComponent implements OnInit {
             this.items = result;
             this.newItemModel = new AddItemModel();
           });
+      }
+    });
+  }
+
+  private getListInfo() {
+    this.route.paramMap.subscribe(params => {
+      const listId = params.get('id');
+      if (listId !== '0') {
+        this.todoService.getList(Number(listId))
+          .subscribe(list => {
+            if (list) {
+              this.listName = list.name;
+            }
+          });
+      } else {
+        this.listName = 'Tasks';
       }
     });
   }

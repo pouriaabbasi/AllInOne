@@ -37,14 +37,14 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a [routerLink]="['/todo', 0]">
+                        <a [routerLink]="['/todo', 0]" (click)="showInfo(0)">
                             <i class="fa fa-list-ul"></i>
                             <span>Tasks</span>
                         </a>
                     </li>
                     <li *ngFor="let list of todoMenu.lists">
                         <div class="col col-sm-10">
-                            <a [routerLink]="['/todo', list.id]">
+                            <a [routerLink]="['/todo', list.id]" (click)="showInfo(list.id)">
                                 <i class="fa fa-calendar-plus-o"></i>
                                 <span>{{list.name}}</span>
                             </a>
