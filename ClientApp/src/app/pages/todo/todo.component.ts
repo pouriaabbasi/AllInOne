@@ -2,18 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { TodoService } from 'src/app/services/todo.service';
 import { ItemModel, AddItemModel } from 'src/app/models/todo.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BaseComponent } from 'src/app/_components/base/base.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.css']
 })
-export class TodoComponent implements OnInit {
+export class TodoComponent extends BaseComponent implements OnInit {
 
   constructor(
+    protected toastr: ToastrService,
     private route: ActivatedRoute,
     private todoService: TodoService
   ) {
+    super(toastr);
   }
 
   items: ItemModel[] = [];
@@ -30,7 +34,7 @@ export class TodoComponent implements OnInit {
       this.todoService.addItem(this.newItemModel)
         .subscribe(result => {
           if (result) {
-            // this.showSuccess('Add Item', 'Your item was added');
+            this.showSuccess('Add Item', 'Your item was added');
             this.fetchData();
           }
         });
@@ -41,6 +45,7 @@ export class TodoComponent implements OnInit {
     this.todoService.changeItemStatus(itemId)
       .subscribe(result => {
         if (result) {
+          this.showSuccess('Change Item\' Status', 'Your item\'s status was changed');
           this.fetchData();
         }
       });
@@ -50,7 +55,7 @@ export class TodoComponent implements OnInit {
     this.todoService.deleteItem(itemId)
       .subscribe(result => {
         if (result) {
-          // this.showSuccess('Delete Item', 'Your item was deleted');
+          this.showSuccess('Delete Item', 'Your item was deleted');
           this.fetchData();
         }
       });
@@ -60,7 +65,7 @@ export class TodoComponent implements OnInit {
     this.todoService.editItem(itemId, itemName)
       .subscribe(result => {
         if (result) {
-          // this.showSuccess('Edit Item', 'Your item was edited');
+          this.showSuccess('Edit Item', 'Your item was edited');
           this.fetchData();
         }
       });

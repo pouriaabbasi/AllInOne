@@ -43,21 +43,21 @@
                         </a>
                     </li>
                     <li *ngFor="let list of todoMenu.lists">
-                        <div class="input-group">
+                        <div class="col col-sm-10">
                             <a [routerLink]="['/todo', list.id]">
                                 <i class="fa fa-calendar-plus-o"></i>
                                 <span>{{list.name}}</span>
                             </a>
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-xs btn-danger" (click)="removeList(list.id)">
-                                    <i class="fa fa-remove"></i>
-                                </button>
-                            </span>
+                        </div>
+                        <div class="col col-sm-1">
+                            <button type="button" class="btn btn-xs btn-danger" (click)="removeList(list.id)">
+                                <i class="fa fa-remove"></i>
+                            </button>
                         </div>
                     </li>
                     <li>
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="new list" (keyup.enter)="addNewList()"
+                            <input type="text" class="form-control input-sm" placeholder="new list" (keyup.enter)="addNewList()"
                                 [(ngModel)]="newListName">
                         </div>
                     </li>
