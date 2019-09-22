@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { SecurityService } from 'src/app/services/security.service';
-import { TodoMenu } from 'src/app/models/todo.model';
+import { TodoMenu, TodoListModel } from 'src/app/models/todo.model';
 import { TodoService } from 'src/app/services/todo.service';
 import { BaseComponent } from '../base/base.component';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-sidebar',
@@ -14,12 +15,14 @@ export class MainSidebarComponent extends BaseComponent implements OnInit {
 
   fullName = '';
   newListName = '';
+  newGroupName = '';
   todoMenu = new TodoMenu();
 
   constructor(
     protected toastr: ToastrService,
     private securityService: SecurityService,
-    private todoService: TodoService
+    private todoService: TodoService,
+    private router: Router
   ) {
     super(toastr);
   }
@@ -31,9 +34,9 @@ export class MainSidebarComponent extends BaseComponent implements OnInit {
 
   private getLists() {
     this.todoService.getLists()
-      .subscribe(result => {
-        if (result) {
-          this.todoMenu.lists = result;
+      .subscribe(lists => {
+        if (lists) {
+          this.todoMenu.lists = lists;
         }
       });
   }
@@ -44,6 +47,18 @@ export class MainSidebarComponent extends BaseComponent implements OnInit {
         if (result) {
           this.newListName = '';
           this.todoMenu.lists.push(result);
+          this.showSuccess('Add List', 'Your list was added');
+        }
+      });
+  }
+
+  public addNewGroup() {
+    this.todoService.addGroup(this.newGroupName)
+      .subscribe(result => {
+        if (result) {
+          this.newGroupName = '';
+          this.todoMenu.groups.push({ name: result.name, lists: new Array<TodoListModel>() });
+          this.showSuccess('Add Group', 'Your group was added');
         }
       });
   }
@@ -54,6 +69,8 @@ export class MainSidebarComponent extends BaseComponent implements OnInit {
         if (result) {
           const listIndex = this.todoMenu.lists.findIndex(x => x.id === listId);
           this.todoMenu.lists.splice(listIndex, 1);
+          this.showSuccess('Delete List', 'Your list was deleted');
+          this.router.navigate(['/todo/0']);
         }
       });
   }

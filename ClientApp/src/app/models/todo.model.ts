@@ -6,6 +6,12 @@ export class ListModel {
     userId: number;
 }
 
+export class GroupModel {
+    id: number;
+    name: string;
+    userId: number;
+}
+
 export class ItemModel {
     id: number;
     name: string;

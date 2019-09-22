@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base/base.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ItemModel, AddItemModel, TodoListModel, ListModel } from '../models/todo.model';
+import { ItemModel, AddItemModel, TodoListModel, ListModel, GroupModel } from '../models/todo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +57,9 @@ export class TodoService extends BaseService {
 
   public getList(listId: number): Observable<ListModel> {
     return this.get(`TodoList/GetList/${listId}`);
+  }
+
+  public addGroup(gorupName: string): Observable<GroupModel> {
+    return this.post('TodoGroup/AddGroup', { name: gorupName });
   }
 }

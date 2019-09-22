@@ -55,10 +55,16 @@
                             </button>
                         </div>
                     </li>
+                    <!-- <li>
+                        <div class="form-group">
+                            <input type="text" class="form-control input-sm" placeholder="new group"
+                                (keyup.enter)="addNewGroup()" [(ngModel)]="newGroupName">
+                        </div>
+                    </li> -->
                     <li>
                         <div class="form-group">
-                            <input type="text" class="form-control input-sm" placeholder="new list" (keyup.enter)="addNewList()"
-                                [(ngModel)]="newListName">
+                            <input type="text" class="form-control input-sm" placeholder="new list"
+                                (keyup.enter)="addNewList()" [(ngModel)]="newListName">
                         </div>
                     </li>
                 </ul>
