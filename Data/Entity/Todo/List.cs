@@ -9,6 +9,7 @@ namespace AllInOne.Data.Entity.Todo
     public class List : BaseEntity
     {
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
         public long UserId { get; set; }
         public long? GroupId { get; set; }

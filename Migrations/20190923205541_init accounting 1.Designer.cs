@@ -4,14 +4,16 @@ using AllInOne.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AllInOne.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20190923205541_init accounting 1")]
+    partial class initaccounting1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,15 +35,9 @@ namespace AllInOne.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<bool>("OveralTotal");
-
-                    b.Property<long>("UserId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CostSheetGroupId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("CostSheet","Accounting");
                 });
@@ -56,84 +52,9 @@ namespace AllInOne.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<long>("UserId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("CostSheetGroup","Accounting");
-                });
-
-            modelBuilder.Entity("AllInOne.Data.Entity.Accounting.Plan", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("EndDate");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime>("StartDate");
-
-                    b.Property<long>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Plane","Accounting");
-                });
-
-            modelBuilder.Entity("AllInOne.Data.Entity.Accounting.PlanDetail", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Achieve");
-
-                    b.Property<double>("Amount");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<long>("PlanId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlanId");
-
-                    b.ToTable("PlanDetail","Accounting");
-                });
-
-            modelBuilder.Entity("AllInOne.Data.Entity.Accounting.Transaction", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<double>("Amount");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<string>("Description");
-
-                    b.Property<long?>("PlanDetailId");
-
-                    b.Property<long>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlanDetailId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Transaction","Accounting");
                 });
 
             modelBuilder.Entity("AllInOne.Data.Entity.Security.User", b =>
@@ -239,47 +160,6 @@ namespace AllInOne.Migrations
                     b.HasOne("AllInOne.Data.Entity.Accounting.CostSheetGroup", "CostSheetGroup")
                         .WithMany("CostSheets")
                         .HasForeignKey("CostSheetGroupId");
-
-                    b.HasOne("AllInOne.Data.Entity.Security.User", "User")
-                        .WithMany("CostSheets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AllInOne.Data.Entity.Accounting.CostSheetGroup", b =>
-                {
-                    b.HasOne("AllInOne.Data.Entity.Security.User", "User")
-                        .WithMany("CostSheetGroups")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AllInOne.Data.Entity.Accounting.Plan", b =>
-                {
-                    b.HasOne("AllInOne.Data.Entity.Security.User", "User")
-                        .WithMany("Plans")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AllInOne.Data.Entity.Accounting.PlanDetail", b =>
-                {
-                    b.HasOne("AllInOne.Data.Entity.Accounting.Plan", "Plan")
-                        .WithMany("PlanDetails")
-                        .HasForeignKey("PlanId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AllInOne.Data.Entity.Accounting.Transaction", b =>
-                {
-                    b.HasOne("AllInOne.Data.Entity.Accounting.PlanDetail", "PlanDetail")
-                        .WithMany("Transactions")
-                        .HasForeignKey("PlanDetailId");
-
-                    b.HasOne("AllInOne.Data.Entity.Security.User", "User")
-                        .WithMany("Transactions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AllInOne.Data.Entity.Todo.Group", b =>

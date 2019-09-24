@@ -1,3 +1,4 @@
+using AllInOne.Data.Entity.Accounting;
 using AllInOne.Data.Entity.Security;
 using AllInOne.Data.Entity.Todo;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,22 @@ namespace AllInOne.Data
 
         }
 
-        //Todo
+        #region Accounting
+        public DbSet<CostSheetGroup> CostSheetGroups { get; set; }
+        public DbSet<CostSheet> CostSheets { get; set; }
+        public DbSet<Plan> Plans { get; set; }
+        public DbSet<PlanDetail> PlanDetails { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        #endregion
+
+        #region Security
+        public DbSet<User> Users { get; set; }
+        #endregion
+
+        #region Todo
         public DbSet<Group> Groups { get; set; }
         public DbSet<List> Lists { get; set; }
         public DbSet<Item> Items { get; set; }
-
-        //Security
-        public DbSet<User> Users { get; set; }
+        #endregion
     }
 }
