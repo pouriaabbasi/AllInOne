@@ -24,9 +24,8 @@ namespace AllInOne.Data.Entity.Security
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<List> Lists { get; set; }
         public virtual ICollection<Item> Items { get; set; }
-        public virtual ICollection<CostSheet> CostSheets { get; set; }
-        public virtual ICollection<CostSheetGroup> CostSheetGroups { get; set; }
         public virtual ICollection<Plan> Plans { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<Account> Accounts { get; set; }
     }
 }

@@ -16,7 +16,10 @@ namespace AllInOne.Data.Entity.Accounting
         [Required]
         public double Amount { get; set; }
         public bool Achieve { get; set; }
-
+        [MaxLength(1000)]
+        public string Description { get; set; }
+        public bool AllowOveral { get; set; }
+        
         public virtual Plan Plan { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
     }

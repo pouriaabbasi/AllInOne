@@ -4,14 +4,16 @@ using AllInOne.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AllInOne.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20190926191521_fix accounting tables")]
+    partial class fixaccountingtables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,15 +41,11 @@ namespace AllInOne.Migrations
 
                     b.Property<long?>("ParentAccountId");
 
-                    b.Property<long>("UserId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ParentAccountId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Account","Accounting");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("AllInOne.Data.Entity.Accounting.Plan", b =>
@@ -242,11 +240,6 @@ namespace AllInOne.Migrations
                     b.HasOne("AllInOne.Data.Entity.Accounting.Account", "ParentAccount")
                         .WithMany("ChildAccounts")
                         .HasForeignKey("ParentAccountId");
-
-                    b.HasOne("AllInOne.Data.Entity.Security.User", "User")
-                        .WithMany("Accounts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AllInOne.Data.Entity.Accounting.Plan", b =>

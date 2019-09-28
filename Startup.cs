@@ -82,7 +82,7 @@ namespace AllInOne
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             //Accounting
-            services.AddScoped<ICostSheetGroupLib, CostSheetGroupLib>();
+            services.AddScoped<IAccountLib, AccountLib>();
             //Security
             services.AddScoped<IUserLib, UserLib>();
             //Todo

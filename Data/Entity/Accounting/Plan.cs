@@ -18,6 +18,8 @@ namespace AllInOne.Data.Entity.Accounting
         public DateTime StartDate { get; set; }
         [Required]
         public DateTime EndDate { get; set; }
+        [MaxLength(1000)]
+        public string Description { get; set; }
 
         public virtual User User { get; set; }
         public virtual ICollection<PlanDetail> PlanDetails { get; set; }

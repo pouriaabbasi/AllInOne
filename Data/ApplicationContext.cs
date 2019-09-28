@@ -13,10 +13,9 @@ namespace AllInOne.Data
         }
 
         #region Accounting
-        public DbSet<CostSheetGroup> CostSheetGroups { get; set; }
-        public DbSet<CostSheet> CostSheets { get; set; }
         public DbSet<Plan> Plans { get; set; }
         public DbSet<PlanDetail> PlanDetails { get; set; }
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         #endregion
 

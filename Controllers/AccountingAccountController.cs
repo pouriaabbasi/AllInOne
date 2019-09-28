@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using AllInOne.Controllers.Base;
-using AllInOne.Models.Accounting.CostSheetGroup;
+using AllInOne.Models.Accounting.Account;
 using AllInOne.Models.Todo.Group;
-using AllInOne.Models.Todo.List;
 using AllInOne.Services.Contract.Accounting;
 using AllInOne.Services.Contract.Todo;
 using Microsoft.AspNetCore.Authorization;
@@ -13,25 +11,25 @@ namespace AllInOne.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class AccountingCostSheetGroupController : BaseController
+    public class AccountingAccount : BaseController
     {
-        private readonly ICostSheetGroupLib costSheetGroupLib;
+        private readonly IAccountLib accountLib;
 
-        public AccountingCostSheetGroupController(
-        ICostSheetGroupLib costSheetGroupLib
+        public AccountingAccount(
+        IAccountLib accountLib
         )
         {
-            this.costSheetGroupLib = costSheetGroupLib;
+            this.accountLib = accountLib;
         }
 
         [HttpPost]
-        public IActionResult AddCostSheetGroup([FromBody] AddCostSheetGroupModel model)
+        public IActionResult AddAccount([FromBody] AddAccountModel model)
         {
             try
             {
                 model.UserId = CurrentUserId;
 
-                var result = costSheetGroupLib.AddCostSheetGroup(model);
+                var result = accountLib.AddAccount(model);
 
                 return CustomResult(result);
             }
@@ -41,12 +39,12 @@ namespace AllInOne.Controllers
             }
         }
 
-        [HttpDelete("{costSheetGroupId}")]
-        public IActionResult DeleteCostSheetGroup(long costSheetGroupId)
+        [HttpDelete("{accountId}")]
+        public IActionResult DeleteAccount(long accountId)
         {
             try
             {
-                var result = costSheetGroupLib.DeleteCostSheetGroup(costSheetGroupId, CurrentUserId);
+                var result = accountLib.DeleteAccount(accountId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -56,15 +54,29 @@ namespace AllInOne.Controllers
             }
         }
 
-        [HttpPut("{costSheetGroupId}")]
-        public IActionResult EditCostSheetGroup(long costSheetGroupId, [FromBody] EditCostSheetGroupModel model)
+        [HttpPut("{accountId}")]
+        public IActionResult EditAccount(long accountId, [FromBody] EditAccountModel model)
         {
             try
             {
-                model.Id = costSheetGroupId;
-                model.UserId = CurrentUserId;
+                model.Id = accountId;
 
-                var result = costSheetGroupLib.EditCostSheetGroup(model);
+                var result = accountLib.EditAccount(model, CurrentUserId);
+
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
+
+        [HttpGet("{accountId}")]
+        public IActionResult GetAccount(long accountId)
+        {
+            try
+            {
+                var result = accountLib.GetAccount(accountId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -75,26 +87,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllCostSheetGroups()
+        public IActionResult GetAllAccounts()
         {
             try
             {
-                var result = costSheetGroupLib.GetAllCostSheetGroups(CurrentUserId);
-
-                return CustomResult(result);
-            }
-            catch (System.Exception exp)
-            {
-                return CustomError(exp);
-            }
-        }
-
-        [HttpGet("{costSheetGroupId}")]
-        public IActionResult GetCostSheetGroup(long costSheetGroupId)
-        {
-            try
-            {
-                var result = costSheetGroupLib.GetCostSheetGroup(costSheetGroupId, CurrentUserId);
+                var result = accountLib.GetAllAccounts(CurrentUserId);
 
                 return CustomResult(result);
             }
