@@ -1,5 +1,6 @@
 using AllInOne.Controllers.Base;
 using AllInOne.Models.Accounting.Account;
+using AllInOne.Models.Accounting.Plan;
 using AllInOne.Services.Contract.Accounting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,25 +10,25 @@ namespace AllInOne.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class AccountingAccountController : BaseController
+    public class AccountingPlanController : BaseController
     {
-        private readonly IAccountLib accountLib;
+        private readonly IPlanLib planLib;
 
-        public AccountingAccountController(
-        IAccountLib accountLib
+        public AccountingPlanController(
+            IPlanLib planLib
         )
         {
-            this.accountLib = accountLib;
+            this.planLib = planLib;
         }
 
         [HttpPost]
-        public IActionResult AddAccount([FromBody] AddAccountModel model)
+        public IActionResult AddPlan([FromBody] AddPlanModel model)
         {
             try
             {
                 model.UserId = CurrentUserId;
 
-                var result = accountLib.AddAccount(model);
+                var result = planLib.AddPlan(model);
 
                 return CustomResult(result);
             }
@@ -37,12 +38,12 @@ namespace AllInOne.Controllers
             }
         }
 
-        [HttpDelete("{accountId}")]
-        public IActionResult DeleteAccount(long accountId)
+        [HttpDelete("{planId}")]
+        public IActionResult DeletePlan(long planId)
         {
             try
             {
-                var result = accountLib.DeleteAccount(accountId, CurrentUserId);
+                var result = planLib.DeletePlan(planId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -52,14 +53,14 @@ namespace AllInOne.Controllers
             }
         }
 
-        [HttpPut("{accountId}")]
-        public IActionResult EditAccount(long accountId, [FromBody] EditAccountModel model)
+        [HttpPut("{planId}")]
+        public IActionResult EditPlan(long planId, [FromBody] EditPlanModel model)
         {
             try
             {
-                model.Id = accountId;
+                model.Id = planId;
 
-                var result = accountLib.EditAccount(model, CurrentUserId);
+                var result = planLib.EditPlan(model, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -69,12 +70,12 @@ namespace AllInOne.Controllers
             }
         }
 
-        [HttpGet("{accountId}")]
-        public IActionResult GetAccount(long accountId)
+        [HttpGet("{planId}")]
+        public IActionResult GetPlan(long planId)
         {
             try
             {
-                var result = accountLib.GetAccount(accountId, CurrentUserId);
+                var result = planLib.GetPlan(planId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -85,11 +86,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllAccounts()
+        public IActionResult GetAllPlans()
         {
             try
             {
-                var result = accountLib.GetAllAccounts(CurrentUserId);
+                var result = planLib.GetAllPlans(CurrentUserId);
 
                 return CustomResult(result);
             }
