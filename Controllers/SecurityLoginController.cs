@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AllInOne.Controllers.Base;
 using AllInOne.Models.Security;
 using AllInOne.Services.Contract.Security;
@@ -20,11 +21,11 @@ namespace AllInOne.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             try
             {
-                var result = userLib.Login(model);
+                var result = await userLib.LoginAsync(model);
                 return CustomResult(result);
             }
             catch (System.Exception exp)
@@ -35,11 +36,11 @@ namespace AllInOne.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             try
             {
-                var result = userLib.Register(model);
+                var result = await userLib.RegisterAsync(model);
                 return CustomResult(result);
             }
             catch (System.Exception exp)

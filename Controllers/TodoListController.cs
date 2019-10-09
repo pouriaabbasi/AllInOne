@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AllInOne.Controllers.Base;
 using AllInOne.Models.Todo.Group;
 using AllInOne.Models.Todo.List;
@@ -23,13 +24,13 @@ namespace AllInOne.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddList([FromBody] AddListModel model)
+        public async Task<IActionResult> AddList([FromBody] AddListModel model)
         {
             try
             {
                 model.UserId = CurrentUserId;
 
-                var result = listLib.AddList(model);
+                var result = await listLib.AddListAsync(model);
 
                 return CustomResult(result);
             }
@@ -40,11 +41,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpPut("{listId}/{groupId}")]
-        public IActionResult AddListToGroup(long listId, long groupId)
+        public async Task<IActionResult> AddListToGroup(long listId, long groupId)
         {
             try
             {
-                var result = listLib.AddListToGroup(listId, groupId, CurrentUserId);
+                var result = await listLib.AddListToGroupAsync(listId, groupId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -55,11 +56,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpDelete("{listId}")]
-        public IActionResult DeleteList(long listId)
+        public async Task<IActionResult> DeleteList(long listId)
         {
             try
             {
-                var result = listLib.DeleteList(listId, CurrentUserId);
+                var result = await listLib.DeleteListAsync(listId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -70,7 +71,7 @@ namespace AllInOne.Controllers
         }
 
         [HttpPut("{listId}")]
-        public IActionResult EditList(long listId, [FromBody] EditListModel model)
+        public async Task<IActionResult> EditList(long listId, [FromBody] EditListModel model)
         {
             try
             {
@@ -78,7 +79,7 @@ namespace AllInOne.Controllers
 
                 model.Id = listId;
 
-                var result = listLib.EditList(model);
+                var result = await listLib.EditListAsync(model);
 
                 return CustomResult(result);
             }
@@ -89,11 +90,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllList()
+        public async Task<IActionResult> GetAllList()
         {
             try
             {
-                var result = listLib.GetAllList(CurrentUserId);
+                var result = await listLib.GetAllListAsync(CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -104,11 +105,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet("{listId}")]
-        public IActionResult GetList(long listId)
+        public async Task<IActionResult> GetList(long listId)
         {
             try
             {
-                var result = listLib.GetList(listId, CurrentUserId);
+                var result = await listLib.GetListAsync(listId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -119,11 +120,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpPut("{listId}/{groupId}")]
-        public IActionResult RemoveListFromGroup(long listId, long groupId)
+        public async Task<IActionResult> RemoveListFromGroup(long listId, long groupId)
         {
             try
             {
-                var result = listLib.RemoveListFromGroup(listId, groupId, CurrentUserId);
+                var result = await listLib.RemoveListFromGroupAsync(listId, groupId, CurrentUserId);
 
                 return CustomResult(result);
 

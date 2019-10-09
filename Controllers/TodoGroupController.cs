@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AllInOne.Controllers.Base;
 using AllInOne.Models.Todo.Group;
 using AllInOne.Services.Contract.Todo;
@@ -21,13 +22,13 @@ namespace AllInOne.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddGroup([FromBody] AddGroupModel model)
+        public async Task<IActionResult> AddGroup([FromBody] AddGroupModel model)
         {
             try
             {
                 model.UserId = CurrentUserId;
 
-                var result = groupLib.AddGroup(model);
+                var result =await groupLib.AddGroupAsync(model);
 
                 return CustomResult(result);
             }
@@ -38,23 +39,23 @@ namespace AllInOne.Controllers
         }
 
         [HttpPut("{groupId}")]
-        public GroupModel EditGroup(long groupId, [FromBody] EditGroupModel model)
+        public async Task<GroupModel> EditGroup(long groupId, [FromBody] EditGroupModel model)
         {
             model.UserId = CurrentUserId;
 
             model.Id = groupId;
 
-            var result = groupLib.EditGroup(model);
+            var result =await groupLib.EditGroupAsync(model);
 
             return result;
         }
 
         [HttpDelete("{groupId}")]
-        public IActionResult DeleteGroup(long groupId)
+        public async Task<IActionResult> DeleteGroup(long groupId)
         {
             try
             {
-                var result = groupLib.DeleteGroup(groupId, CurrentUserId);
+                var result = await groupLib.DeleteGroupAsync(groupId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -65,11 +66,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet("{groupId}")]
-        public IActionResult GetGroup(long groupId)
+        public async Task<IActionResult> GetGroup(long groupId)
         {
             try
             {
-                var result = groupLib.GetGroup(groupId, CurrentUserId);
+                var result = await groupLib.GetGroupAsync(groupId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -81,11 +82,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllGroups()
+        public async Task<IActionResult> GetAllGroups()
         {
             try
             {
-                var result = groupLib.GetAllGroups(CurrentUserId);
+                var result = await groupLib.GetAllGroupsAsync(CurrentUserId);
 
                 return CustomResult(result);
             }

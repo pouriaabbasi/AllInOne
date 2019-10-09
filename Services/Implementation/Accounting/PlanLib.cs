@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllInOne.Data;
 using AllInOne.Data.Entity.Accounting;
 using AllInOne.Models.Accounting.Plan;
@@ -21,7 +22,7 @@ namespace AllInOne.Services.Implementation.Accounting
             this.unitOfWork = unitOfWork;
         }
 
-        public PlanModel AddPlan(AddPlanModel model)
+        public async Task<PlanModel> AddPlanAsync(AddPlanModel model)
         {
             var entity = new Plan
             {
@@ -32,30 +33,30 @@ namespace AllInOne.Services.Implementation.Accounting
                 UserId = model.UserId
             };
 
-            planRepo.Add(entity);
+            await planRepo.AddAsync(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return ConvertEntityToPlanModel(entity);
         }
 
-        public bool DeletePlan(long planId, long userId)
+        public async Task<bool> DeletePlanAsync(long planId, long userId)
         {
-            var entity = planRepo.First(x =>
+            var entity = await planRepo.FirstAsync(x =>
                 x.Id == planId
                 && x.UserId == userId);
             if (entity == null) throw new Exception("Plan not exist!");
 
             planRepo.Delete(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return true;
         }
 
-        public PlanModel EditPlan(EditPlanModel model, long userId)
+        public async Task<PlanModel> EditPlanAsync(EditPlanModel model, long userId)
         {
-            var entity = planRepo.First(x =>
+            var entity = await planRepo.FirstAsync(x =>
                 x.Id == model.Id
                 && x.UserId == userId);
             if (entity == null) throw new Exception("Plan not exist!");
@@ -65,22 +66,25 @@ namespace AllInOne.Services.Implementation.Accounting
             entity.Name = model.Name;
             entity.StartDate = model.StartDate;
 
+            await unitOfWork.CommitAsync();
+
             return ConvertEntityToPlanModel(entity);
         }
 
-        public List<PlanModel> GetAllPlans(long userId)
+        public async Task<List<PlanModel>> GetAllPlansAsync(long userId)
         {
-            return planRepo.GetQuery()
+            return await planRepo.GetQuery()
+                .ToAsyncEnumerable()
                 .Where(x => x.UserId == userId)
                 .Select(ConvertEntityToPlanModel)
                 .ToList();
         }
 
-        public PlanModel GetPlan(long planId, long userId)
+        public async Task<PlanModel> GetPlanAsync(long planId, long userId)
         {
-            var entity = planRepo.First(x =>
-                x.Id == planId
-                && x.UserId == userId);
+            var entity = await planRepo.FirstAsync(x =>
+               x.Id == planId
+               && x.UserId == userId);
             if (entity == null) throw new Exception("Plan not exist!");
 
             return ConvertEntityToPlanModel(entity);

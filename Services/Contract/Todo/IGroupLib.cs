@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AllInOne.Models.Todo.Group;
 
 namespace AllInOne.Services.Contract.Todo
 {
     public interface IGroupLib
     {
-        GroupModel AddGroup(AddGroupModel model);
-        GroupModel EditGroup(EditGroupModel model);
-        bool DeleteGroup(long groupId, long userId);
-        GroupModel GetGroup(long groupId, long userId);
-        List<GroupModel> GetAllGroups(long userId);
+        Task<GroupModel> AddGroupAsync(AddGroupModel model);
+        Task<GroupModel> EditGroupAsync(EditGroupModel model);
+        Task<bool> DeleteGroupAsync(long groupId, long userId);
+        Task<GroupModel> GetGroupAsync(long groupId, long userId);
+        Task<List<GroupModel>> GetAllGroupsAsync(long userId);
     }
 }

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AllInOne.Controllers.Base;
 using AllInOne.Models.Accounting.Account;
 using AllInOne.Services.Contract.Accounting;
@@ -21,13 +22,13 @@ namespace AllInOne.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddAccount([FromBody] AddAccountModel model)
+        public async Task<IActionResult> AddAccount([FromBody] AddAccountModel model)
         {
             try
             {
                 model.UserId = CurrentUserId;
 
-                var result = accountLib.AddAccount(model);
+                var result = await accountLib.AddAccountAsync(model);
 
                 return CustomResult(result);
             }
@@ -38,11 +39,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpDelete("{accountId}")]
-        public IActionResult DeleteAccount(long accountId)
+        public async Task<IActionResult> DeleteAccount(long accountId)
         {
             try
             {
-                var result = accountLib.DeleteAccount(accountId, CurrentUserId);
+                var result = await accountLib.DeleteAccountAsync(accountId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -53,13 +54,13 @@ namespace AllInOne.Controllers
         }
 
         [HttpPut("{accountId}")]
-        public IActionResult EditAccount(long accountId, [FromBody] EditAccountModel model)
+        public async Task<IActionResult> EditAccount(long accountId, [FromBody] EditAccountModel model)
         {
             try
             {
                 model.Id = accountId;
 
-                var result = accountLib.EditAccount(model, CurrentUserId);
+                var result = await accountLib.EditAccountAsync(model, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -70,11 +71,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet("{accountId}")]
-        public IActionResult GetAccount(long accountId)
+        public async Task<IActionResult> GetAccount(long accountId)
         {
             try
             {
-                var result = accountLib.GetAccount(accountId, CurrentUserId);
+                var result = await accountLib.GetAccountAsync(accountId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -85,11 +86,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllAccounts()
+        public async Task<IActionResult> GetAllAccounts()
         {
             try
             {
-                var result = accountLib.GetAllAccounts(CurrentUserId);
+                var result = await accountLib.GetAllAccountsAsync(CurrentUserId);
 
                 return CustomResult(result);
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllInOne.Data;
 using AllInOne.Data.Entity.Todo;
 using AllInOne.Models.Todo.Item;
@@ -24,7 +25,7 @@ namespace AllInOne.Services.Implementation.Todo
             this.listRepo = listRepo;
         }
 
-        public ItemModel AddItem(AddItemModel model)
+        public async Task<ItemModel> AddItemAsync(AddItemModel model)
         {
             var entity = new Item
             {
@@ -34,16 +35,16 @@ namespace AllInOne.Services.Implementation.Todo
                 UserId = model.UsesrId
             };
 
-            itemRepo.Add(entity);
+            await itemRepo.AddAsync(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return ConvertItemToItemModel(entity);
         }
 
-        public bool ChangeItemStatus(long itemId, long userId)
+        public async Task<bool> ChangeItemStatusAsync(long itemId, long userId)
         {
-            var entity = itemRepo.First(x => x.Id == itemId);
+            var entity =await itemRepo.FirstAsync(x => x.Id == itemId);
             if (entity == null) throw new Exception("Item Not Exist");
 
             if (entity.UserId != userId) throw new Exception("User Doesn't Owner Of Item");
@@ -56,28 +57,28 @@ namespace AllInOne.Services.Implementation.Todo
 
             itemRepo.Update(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return true;
         }
 
-        public bool DeleteItem(long itemId, long userId)
+        public async Task<bool> DeleteItemAsync(long itemId, long userId)
         {
-            var entity = itemRepo.First(x => x.Id == itemId);
+            var entity = await itemRepo.FirstAsync(x => x.Id == itemId);
             if (entity == null) throw new Exception("Item Not Exist");
 
             if (entity.UserId != userId) throw new Exception("User Doesn't Owner Of Item");
 
             itemRepo.Delete(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return true;
         }
 
-        public ItemModel EditItem(EditItemModel model)
+        public async Task<ItemModel> EditItemAsync(EditItemModel model)
         {
-            var entity = itemRepo.First(x => x.Id == model.Id);
+            var entity = await itemRepo.FirstAsync(x => x.Id == model.Id);
             if (entity == null) throw new Exception("Item Not Exist");
 
             if (entity.UserId != model.UserId) throw new Exception("User Doesn't Owner Of Item");
@@ -86,14 +87,15 @@ namespace AllInOne.Services.Implementation.Todo
 
             itemRepo.Update(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return ConvertItemToItemModel(entity);
         }
 
-        public List<ItemModel> GetAllItems(long userId)
+        public async Task<List<ItemModel>> GetAllItemsAsync(long userId)
         {
-            return itemRepo.GetQuery()
+            return await itemRepo.GetQuery()
+                .ToAsyncEnumerable()
                 .Where(x => x.UserId == userId)
                 .OrderBy(x => x.Completed)
                 .ThenByDescending(x => x.CreatedDate)
@@ -101,9 +103,9 @@ namespace AllInOne.Services.Implementation.Todo
                 .ToList();
         }
 
-        public ItemModel GetItem(long itemId, long userId)
+        public async Task<ItemModel> GetItemAsync(long itemId, long userId)
         {
-            var entity = itemRepo.First(x => x.Id == itemId);
+            var entity = await itemRepo.FirstAsync(x => x.Id == itemId);
             if (entity == null) throw new Exception("Item Not Exist");
 
             if (entity.UserId != userId) throw new Exception("User Doesn't Owner Of Item");
@@ -111,15 +113,17 @@ namespace AllInOne.Services.Implementation.Todo
             return ConvertItemToItemModel(entity);
         }
 
-        public List<ItemModel> GetListItems(long userId, long listId)
+        public async Task<List<ItemModel>> GetListItemsAsync(long userId, long listId)
         {
-            var isOwner = listRepo.GetQuery()
+            var isOwner = await listRepo.GetQuery()
+                .ToAsyncEnumerable()
                 .Any(x =>
                     x.Id == listId
                     && x.UserId == userId);
             if (!isOwner) throw new Exception("You can only access to your lists!");
 
-            return itemRepo.GetQuery()
+            return await itemRepo.GetQuery()
+                .ToAsyncEnumerable()
                 .Where(x =>
                     x.ListId == listId
                     && x.UserId == userId)
@@ -129,9 +133,10 @@ namespace AllInOne.Services.Implementation.Todo
                 .ToList();
         }
 
-        public List<ItemModel> GetOrphanItems(long userId)
+        public async Task<List<ItemModel>> GetOrphanItemsAsync(long userId)
         {
-            return itemRepo.GetQuery()
+            return await itemRepo.GetQuery()
+                .ToAsyncEnumerable()
                 .Where(x =>
                     x.UserId == userId
                     && x.ListId == null)

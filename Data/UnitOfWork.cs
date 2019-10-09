@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace AllInOne.Data
@@ -14,6 +15,11 @@ namespace AllInOne.Data
         public void Commit()
         {
             Context.SaveChanges();
+        }
+
+        public async Task CommitAsync()
+        {
+            await Context.SaveChangesAsync();
         }
 
         public void Dispose()

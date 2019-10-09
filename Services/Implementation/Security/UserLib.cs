@@ -2,6 +2,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using AllInOne.Data;
 using AllInOne.Data.Entity.Security;
 using AllInOne.Models.Security;
@@ -28,10 +29,10 @@ namespace AllInOne.Services.Implementation.Security
             this.userRepo = userRepo;
         }
 
-        public UserModel Login(LoginModel model)
+        public async Task<UserModel> LoginAsync(LoginModel model)
         {
             var password = model.Password.HashPassword(model.Username);
-            var user = userRepo.First(x =>
+            var user = await userRepo.FirstAsync(x =>
                 x.Username == model.Username
                 && x.Password == password);
 
@@ -60,7 +61,7 @@ namespace AllInOne.Services.Implementation.Security
             };
         }
 
-        public bool Register(RegisterModel model)
+        public async Task<bool> RegisterAsync(RegisterModel model)
         {
             var userEntity = new User
             {
@@ -71,9 +72,9 @@ namespace AllInOne.Services.Implementation.Security
                 Password = model.Password.HashPassword(model.Username)
             };
 
-            userRepo.Add(userEntity);
+            await userRepo.AddAsync(userEntity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return true;
         }

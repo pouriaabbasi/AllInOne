@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AllInOne.Controllers.Base;
 using AllInOne.Models.Accounting.Account;
 using AllInOne.Models.Accounting.Plan;
@@ -22,13 +23,13 @@ namespace AllInOne.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddPlan([FromBody] AddPlanModel model)
+        public async Task<IActionResult> AddPlan([FromBody] AddPlanModel model)
         {
             try
             {
                 model.UserId = CurrentUserId;
 
-                var result = planLib.AddPlan(model);
+                var result = await planLib.AddPlanAsync(model);
 
                 return CustomResult(result);
             }
@@ -39,11 +40,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpDelete("{planId}")]
-        public IActionResult DeletePlan(long planId)
+        public async Task<IActionResult> DeletePlan(long planId)
         {
             try
             {
-                var result = planLib.DeletePlan(planId, CurrentUserId);
+                var result = await planLib.DeletePlanAsync(planId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -54,13 +55,13 @@ namespace AllInOne.Controllers
         }
 
         [HttpPut("{planId}")]
-        public IActionResult EditPlan(long planId, [FromBody] EditPlanModel model)
+        public async Task<IActionResult> EditPlan(long planId, [FromBody] EditPlanModel model)
         {
             try
             {
                 model.Id = planId;
 
-                var result = planLib.EditPlan(model, CurrentUserId);
+                var result = await planLib.EditPlanAsync(model, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -71,11 +72,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet("{planId}")]
-        public IActionResult GetPlan(long planId)
+        public async Task<IActionResult> GetPlan(long planId)
         {
             try
             {
-                var result = planLib.GetPlan(planId, CurrentUserId);
+                var result = await planLib.GetPlanAsync(planId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -86,11 +87,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllPlans()
+        public async Task<IActionResult> GetAllPlans()
         {
             try
             {
-                var result = planLib.GetAllPlans(CurrentUserId);
+                var result = await planLib.GetAllPlansAsync(CurrentUserId);
 
                 return CustomResult(result);
             }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AllInOne.Controllers.Base;
 using AllInOne.Models.Todo.Group;
 using AllInOne.Models.Todo.Item;
@@ -24,13 +25,13 @@ namespace AllInOne.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddItem([FromBody]AddItemModel model)
+        public async Task<IActionResult> AddItem([FromBody]AddItemModel model)
         {
             try
             {
                 model.UsesrId = CurrentUserId;
 
-                var result = itemLib.AddItem(model);
+                var result = await itemLib.AddItemAsync(model);
 
                 return CustomResult(result);
             }
@@ -41,11 +42,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpPut("{itemId}")]
-        public IActionResult ChangeItemStatus(long itemId)
+        public async Task<IActionResult> ChangeItemStatus(long itemId)
         {
             try
             {
-                var result = itemLib.ChangeItemStatus(itemId, CurrentUserId);
+                var result = await itemLib.ChangeItemStatusAsync(itemId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -56,11 +57,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpDelete("{itemId}")]
-        public IActionResult DeleteItem(long itemId)
+        public async Task<IActionResult> DeleteItem(long itemId)
         {
             try
             {
-                var result = itemLib.DeleteItem(itemId, CurrentUserId);
+                var result = await itemLib.DeleteItemAsync(itemId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -71,7 +72,7 @@ namespace AllInOne.Controllers
         }
 
         [HttpPut("{itemId}")]
-        public IActionResult EditItem(long itemId, [FromBody] EditItemModel model)
+        public async Task<IActionResult> EditItem(long itemId, [FromBody] EditItemModel model)
         {
             try
             {
@@ -79,7 +80,7 @@ namespace AllInOne.Controllers
 
                 model.Id = itemId;
 
-                var result = itemLib.EditItem(model);
+                var result = await itemLib.EditItemAsync(model);
 
                 return CustomResult(result);
             }
@@ -90,11 +91,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllItems()
+        public async Task<IActionResult> GetAllItems()
         {
             try
             {
-                var result = itemLib.GetAllItems(CurrentUserId);
+                var result = await itemLib.GetAllItemsAsync(CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -105,11 +106,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet("{itemId}")]
-        public IActionResult GetItem(long itemId)
+        public async Task<IActionResult> GetItem(long itemId)
         {
             try
             {
-                var result = itemLib.GetItem(itemId, CurrentUserId);
+                var result = await itemLib.GetItemAsync(itemId, CurrentUserId);
 
                 return CustomResult(result);
             }
@@ -120,11 +121,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet("{listId}")]
-        public IActionResult GetListItems(long listId)
+        public async Task<IActionResult> GetListItems(long listId)
         {
             try
             {
-                var result = itemLib.GetListItems(CurrentUserId, listId);
+                var result = await itemLib.GetListItemsAsync(CurrentUserId, listId);
 
                 return CustomResult(result);
             }
@@ -135,11 +136,11 @@ namespace AllInOne.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetOrphanItems()
+        public async Task<IActionResult> GetOrphanItems()
         {
             try
             {
-                var result = itemLib.GetOrphanItems(CurrentUserId);
+                var result = await itemLib.GetOrphanItemsAsync(CurrentUserId);
 
                 return CustomResult(result);
             }

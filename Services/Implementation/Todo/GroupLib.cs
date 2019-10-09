@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllInOne.Data;
 using AllInOne.Data.Entity.Todo;
 using AllInOne.Models.Todo.Group;
@@ -21,7 +22,7 @@ namespace AllInOne.Services.Implementation.Todo
             this.unitOfWork = unitOfWork;
         }
 
-        public GroupModel AddGroup(AddGroupModel model)
+        public async Task<GroupModel> AddGroupAsync(AddGroupModel model)
         {
             var entity = new Group
             {
@@ -29,16 +30,16 @@ namespace AllInOne.Services.Implementation.Todo
                 UserId = model.UserId
             };
 
-            groupRepo.Add(entity);
+            await groupRepo.AddAsync(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return ConverGroupToGroupModel(entity);
         }
 
-        public GroupModel EditGroup(EditGroupModel model)
+        public async Task<GroupModel> EditGroupAsync(EditGroupModel model)
         {
-            var entity = groupRepo.First(x => x.Id == model.Id);
+            var entity = await groupRepo.FirstAsync(x => x.Id == model.Id);
             if (entity == null) throw new System.Exception("Group Not Exist");
 
             if (entity.UserId != model.UserId) throw new System.Exception("User Doesn't Owner Of Group");
@@ -47,28 +48,28 @@ namespace AllInOne.Services.Implementation.Todo
 
             groupRepo.Update(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return ConverGroupToGroupModel(entity);
         }
 
-        public bool DeleteGroup(long groupId, long userId)
+        public async Task<bool> DeleteGroupAsync(long groupId, long userId)
         {
-            var entity = groupRepo.First(x => x.Id == groupId);
+            var entity = await groupRepo.FirstAsync(x => x.Id == groupId);
             if (entity == null) throw new System.Exception("Group Not Exist");
 
             if (entity.UserId != userId) throw new System.Exception("User Doesn't Owner Of Group");
 
             groupRepo.Delete(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return true;
         }
 
-        public GroupModel GetGroup(long groupId, long userId)
+        public async Task<GroupModel> GetGroupAsync(long groupId, long userId)
         {
-            var entity = groupRepo.First(x => x.Id == groupId);
+            var entity = await groupRepo.FirstAsync(x => x.Id == groupId);
             if (entity == null) throw new System.Exception("Group Not Exist");
 
             if (entity.UserId != userId) throw new System.Exception("User Doesn't Owner Of Group");
@@ -76,9 +77,10 @@ namespace AllInOne.Services.Implementation.Todo
             return ConverGroupToGroupModel(entity);
         }
 
-        public List<GroupModel> GetAllGroups(long userId)
+        public async Task<List<GroupModel>> GetAllGroupsAsync(long userId)
         {
-            return groupRepo.GetQuery()
+            return await groupRepo.GetQuery()
+                .ToAsyncEnumerable()
                 .Where(x => x.UserId == userId)
                 .Select(ConverGroupToGroupModel)
                 .ToList();

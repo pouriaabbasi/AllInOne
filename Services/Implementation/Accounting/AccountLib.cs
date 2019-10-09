@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllInOne.Data;
 using AllInOne.Data.Entity.Accounting;
 using AllInOne.Models.Accounting.Account;
@@ -20,7 +21,7 @@ namespace AllInOne.Services.Implementation.Accounting
             this.unitOfWork = unitOfWork;
         }
 
-        public AccountModel AddAccount(AddAccountModel model)
+        public async Task<AccountModel> AddAccountAsync(AddAccountModel model)
         {
             var entity = new Account
             {
@@ -33,30 +34,30 @@ namespace AllInOne.Services.Implementation.Accounting
                 UserId = model.UserId
             };
 
-            accountRepo.Add(entity);
+            await accountRepo.AddAsync(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return ConvertEntityToAccountModel(entity);
         }
 
-        public bool DeleteAccount(long accountId, long userId)
+        public async Task<bool> DeleteAccountAsync(long accountId, long userId)
         {
-            var entity = accountRepo.First(x => x.Id == accountId);
+            var entity = await accountRepo.FirstAsync(x => x.Id == accountId);
             if (entity == null) throw new Exception("Account not exist!");
 
             if (entity.UserId != userId) throw new Exception("You can delete only your accounts");
 
             accountRepo.Delete(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return true;
         }
 
-        public AccountModel EditAccount(EditAccountModel model, long userId)
+        public async Task<AccountModel> EditAccountAsync(EditAccountModel model, long userId)
         {
-            var entity = accountRepo.First(x => x.Id == model.Id);
+            var entity = await accountRepo.FirstAsync(x => x.Id == model.Id);
             if (entity == null) throw new Exception("Account not exist!");
 
             if (entity.UserId != userId) throw new Exception("You don't owner of account!");
@@ -69,14 +70,14 @@ namespace AllInOne.Services.Implementation.Accounting
 
             accountRepo.Update(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return ConvertEntityToAccountModel(entity);
         }
 
-        public AccountModel GetAccount(long accountId, long userId)
+        public async Task<AccountModel> GetAccountAsync(long accountId, long userId)
         {
-            var entity = accountRepo.First(x => x.Id == accountId);
+            var entity = await accountRepo.FirstAsync(x => x.Id == accountId);
             if (entity == null) throw new Exception("Account not exist!");
 
             if (entity.UserId != userId) throw new Exception("You don't owner of account!");
@@ -84,9 +85,10 @@ namespace AllInOne.Services.Implementation.Accounting
             return ConvertEntityToAccountModel(entity);
         }
 
-        public List<AccountModel> GetAllAccounts(long userId)
+        public async Task<List<AccountModel>> GetAllAccountsAsync(long userId)
         {
-            return accountRepo.GetQuery()
+            return await accountRepo.GetQuery()
+                .ToAsyncEnumerable()
                 .Where(x => x.UserId == userId)
                 .Select(ConvertEntityToAccountModel)
                 .ToList();

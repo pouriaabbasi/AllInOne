@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllInOne.Data;
 using AllInOne.Data.Entity.Todo;
 using AllInOne.Models.Todo.List;
@@ -23,7 +24,7 @@ namespace AllInOne.Services.Implementation.Todo
             this.groupRepo = groupRepo;
         }
 
-        public ListModel AddList(AddListModel model)
+        public async Task<ListModel> AddListAsync(AddListModel model)
         {
             var entity = new List
             {
@@ -32,19 +33,19 @@ namespace AllInOne.Services.Implementation.Todo
                 UserId = model.UserId
             };
 
-            listRepo.Add(entity);
+            await listRepo.AddAsync(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return ConvertListToListModel(entity);
         }
 
-        public bool AddListToGroup(long listId, long groupId, long userId)
+        public async Task<bool> AddListToGroupAsync(long listId, long groupId, long userId)
         {
-            var listEntity = listRepo.First(x => x.Id == listId);
+            var listEntity = await listRepo.FirstAsync(x => x.Id == listId);
             if (listEntity == null) throw new System.Exception("List Not Exist");
 
-            var groupEntity = groupRepo.First(x => x.Id == groupId);
+            var groupEntity = await groupRepo.FirstAsync(x => x.Id == groupId);
             if (groupEntity == null) throw new System.Exception("Group Not Exist");
 
             if (listEntity.UserId != userId) throw new System.Exception("User Doesn't Owner Of List");
@@ -55,28 +56,28 @@ namespace AllInOne.Services.Implementation.Todo
 
             listRepo.Update(listEntity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return true;
         }
 
-        public bool DeleteList(long listId, long userId)
+        public async Task<bool> DeleteListAsync(long listId, long userId)
         {
-            var entity = listRepo.First(x => x.Id == listId);
+            var entity = await listRepo.FirstAsync(x => x.Id == listId);
             if (entity == null) throw new System.Exception("List Not Exist");
 
             if (entity.UserId != userId) throw new System.Exception("User Doesn't Owner Of List");
 
             listRepo.Delete(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return true;
         }
 
-        public ListModel EditList(EditListModel model)
+        public async Task<ListModel> EditListAsync(EditListModel model)
         {
-            var entity = listRepo.First(x => x.Id == model.Id);
+            var entity = await listRepo.FirstAsync(x => x.Id == model.Id);
             if (entity == null) throw new System.Exception("List Not Exist");
 
             if (entity.UserId != model.UserId) throw new System.Exception("User Doesn't Owner Of List");
@@ -86,22 +87,23 @@ namespace AllInOne.Services.Implementation.Todo
 
             listRepo.Update(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return ConvertListToListModel(entity);
         }
 
-        public List<ListModel> GetAllList(long userId)
+        public async Task<List<ListModel>> GetAllListAsync(long userId)
         {
-            return listRepo.GetQuery()
+            return await listRepo.GetQuery()
+                .ToAsyncEnumerable()
                 .Where(x => x.UserId == userId)
                 .Select(ConvertListToListModel)
                 .ToList();
         }
 
-        public ListModel GetList(long listId, long userId)
+        public async Task<ListModel> GetListAsync(long listId, long userId)
         {
-            var entity = listRepo.First(x => x.Id == listId);
+            var entity = await listRepo.FirstAsync(x => x.Id == listId);
             if (entity == null) throw new System.Exception("List Not Exist");
 
             if (entity.UserId != userId) throw new System.Exception("User Doesn't Owner Of List");
@@ -109,9 +111,9 @@ namespace AllInOne.Services.Implementation.Todo
             return ConvertListToListModel(entity);
         }
 
-        public bool RemoveListFromGroup(long listId, long groupId, long userId)
+        public async Task<bool> RemoveListFromGroupAsync(long listId, long groupId, long userId)
         {
-            var entity = listRepo.First(x => x.Id == listId);
+            var entity = await listRepo.FirstAsync(x => x.Id == listId);
             if (entity == null) throw new System.Exception("List Not Exist");
 
             if (entity.UserId != userId) throw new System.Exception("User Doesn't Owner Of List");
@@ -122,7 +124,7 @@ namespace AllInOne.Services.Implementation.Todo
 
             listRepo.Update(entity);
 
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             return true;
         }
