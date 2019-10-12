@@ -1,4 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AllInOne.Data;
+using AllInOne.Data.Entity.LeitnerBox;
 using AllInOne.Models.LeitnerBox;
 using AllInOne.Services.Contract.LeitnerBox;
 
@@ -6,29 +11,93 @@ namespace AllInOne.Services.Implementation.LeitnerBox
 {
     public class BoxLib : IBoxLib
     {
-        public BoxModel AddBox(AddBoxModel model)
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IRepository<Box> boxRepo;
+
+        public BoxLib(
+            IUnitOfWork unitOfWork,
+            IRepository<Box> boxRepo)
         {
-            throw new System.NotImplementedException();
+            this.boxRepo = boxRepo;
+            this.unitOfWork = unitOfWork;
         }
 
-        public bool DeleteBox(long boxId, long userId)
+        public async Task<BoxModel> AddBoxAsync(AddBoxModel model)
         {
-            throw new System.NotImplementedException();
+            var entity = new Box
+            {
+                Description = model.Description,
+                Name = model.Name,
+                UserId = model.UserId
+            };
+
+            await boxRepo.AddAsync(entity);
+
+            await unitOfWork.CommitAsync();
+
+            return ConvertEntityToBoxModel(entity);
         }
 
-        public BoxModel EditBox(EditBoxModel model, long userId)
+        public async Task<bool> DeleteBoxAsync(long boxId, long userId)
         {
-            throw new System.NotImplementedException();
+            var entity = await boxRepo.FirstAsync(x =>
+                x.Id == boxId
+                && x.UserId == userId);
+
+            if (entity == null) throw new Exception("Item Not Found!");
+
+            boxRepo.Delete(entity);
+
+            await unitOfWork.CommitAsync();
+
+            return true;
         }
 
-        public List<BoxModel> GetAllBox(long userId)
+        public async Task<BoxModel> EditBoxAsync(EditBoxModel model, long userId)
         {
-            throw new System.NotImplementedException();
+            var entity = await boxRepo.FirstAsync(x =>
+                x.Id == model.Id
+                && x.UserId == userId);
+
+            if (entity == null) throw new Exception("Item Not Found!");
+
+            entity.Description = model.Description;
+            entity.Name = model.Name;
+
+            await unitOfWork.CommitAsync();
+
+            return ConvertEntityToBoxModel(entity);
         }
 
-        public BoxModel GetBox(long boxId, long userId)
+        public async Task<List<BoxModel>> GetAllBoxAsync(long userId)
         {
-            throw new System.NotImplementedException();
+            return await boxRepo.GetQuery()
+                .ToAsyncEnumerable()
+                .Where(x => x.UserId == userId)
+                .Select(ConvertEntityToBoxModel)
+                .ToList();
+        }
+
+        public async Task<BoxModel> GetBoxAsync(long boxId, long userId)
+        {
+            var entity = await boxRepo.FirstAsync(x =>
+                x.Id == boxId
+                && x.UserId == userId);
+
+            if (entity == null) throw new Exception("Item Not Found!");
+
+            return ConvertEntityToBoxModel(entity);
+        }
+
+        private BoxModel ConvertEntityToBoxModel(Box entity)
+        {
+            return new BoxModel
+            {
+                Description = entity.Description,
+                Id = entity.Id,
+                Name = entity.Name,
+                UserId = entity.UserId
+            };
         }
     }
 }

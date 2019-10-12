@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AllInOne.Models.LeitnerBox;
 
 namespace AllInOne.Services.Contract.LeitnerBox
 {
     public interface IBoxLib
     {
-        BoxModel AddBox(AddBoxModel model);
-        BoxModel EditBox(EditBoxModel model, long userId);
-        bool DeleteBox(long boxId, long userId);
-        BoxModel GetBox(long boxId, long userId);
-        List<BoxModel> GetAllBox(long userId);
+        Task<BoxModel> AddBoxAsync(AddBoxModel model);
+        Task<BoxModel> EditBoxAsync(EditBoxModel model, long userId);
+        Task<bool> DeleteBoxAsync(long boxId, long userId);
+        Task<BoxModel> GetBoxAsync(long boxId, long userId);
+        Task<List<BoxModel>> GetAllBoxAsync(long userId);
     }
 }

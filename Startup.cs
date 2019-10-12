@@ -1,10 +1,12 @@
 using System.Text;
 using AllInOne.Data;
 using AllInOne.Services.Contract.Accounting;
+using AllInOne.Services.Contract.LeitnerBox;
 using AllInOne.Services.Contract.Security;
 using AllInOne.Services.Contract.Todo;
 using AllInOne.Services.Helpers;
 using AllInOne.Services.Implementation.Accounting;
+using AllInOne.Services.Implementation.LeitnerBox;
 using AllInOne.Services.Implementation.Security;
 using AllInOne.Services.Implementation.Todo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -83,6 +85,8 @@ namespace AllInOne
 
             //Accounting
             services.AddScoped<IAccountLib, AccountLib>();
+            //LeitnerBox
+            services.AddScoped<IBoxLib, BoxLib>();
             //Security
             services.AddScoped<IUserLib, UserLib>();
             //Todo
