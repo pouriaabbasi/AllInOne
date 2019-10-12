@@ -1,4 +1,5 @@
 using AllInOne.Data.Entity.Accounting;
+using AllInOne.Data.Entity.LeitnerBox;
 using AllInOne.Data.Entity.Security;
 using AllInOne.Data.Entity.Todo;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,12 @@ namespace AllInOne.Data
         public DbSet<Group> Groups { get; set; }
         public DbSet<List> Lists { get; set; }
         public DbSet<Item> Items { get; set; }
+        #endregion
+
+        #region LeitnerBox
+        public DbSet<Box> Boex { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<QuestionHistory> QuestionHistories { get; set; }
         #endregion
     }
 }
