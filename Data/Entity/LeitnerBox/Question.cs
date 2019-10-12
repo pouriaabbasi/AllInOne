@@ -30,6 +30,8 @@ namespace AllInOne.Data.Entity.LeitnerBox
         public byte FailCount { get; set; }
         [Required]
         public DateTime CreateDate { get; set; }
+        public bool IsPending { get; set; }
+        public bool IsFinished { get; set; }
         public long BoxId { get; set; }
 
         public virtual Box Box { get; set; }

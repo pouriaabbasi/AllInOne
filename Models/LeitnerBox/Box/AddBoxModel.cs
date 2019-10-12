@@ -1,4 +1,4 @@
-namespace AllInOne.Models.LeitnerBox
+namespace AllInOne.Models.LeitnerBox.Box
 {
     public class AddBoxModel
     {

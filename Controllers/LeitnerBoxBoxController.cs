@@ -1,7 +1,6 @@
-using System;
 using System.Threading.Tasks;
 using AllInOne.Controllers.Base;
-using AllInOne.Models.LeitnerBox;
+using AllInOne.Models.LeitnerBox.Box;
 using AllInOne.Services.Contract.LeitnerBox;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AllInOne.Data;
 using AllInOne.Data.Entity.LeitnerBox;
-using AllInOne.Models.LeitnerBox;
+using AllInOne.Models.LeitnerBox.Box;
 using AllInOne.Services.Contract.LeitnerBox;
 
 namespace AllInOne.Services.Implementation.LeitnerBox

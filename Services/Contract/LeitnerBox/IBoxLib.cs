@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AllInOne.Models.LeitnerBox;
+using AllInOne.Models.LeitnerBox.Box;
 
 namespace AllInOne.Services.Contract.LeitnerBox
 {
