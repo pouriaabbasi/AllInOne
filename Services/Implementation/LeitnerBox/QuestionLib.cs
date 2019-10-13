@@ -14,19 +14,22 @@ namespace AllInOne.Services.Implementation.LeitnerBox
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IRepository<Question> questionRepo;
-        private readonly IRepository<QuestionHistory> questionHistoryRepo;
+        private readonly IRepository<Box> boxRepo;
 
         public QuestionLib(
             IUnitOfWork unitOfWork,
             IRepository<Question> questionRepo,
-            IRepository<QuestionHistory> questionHistoryRepo)
+            IRepository<Box> boxRepo)
         {
             this.unitOfWork = unitOfWork;
             this.questionRepo = questionRepo;
-            this.questionHistoryRepo = questionHistoryRepo;
+            this.boxRepo = boxRepo;
         }
         public async Task<QuestionModel> AddQuestionAsync(AddQuestionModel model)
         {
+            if (!boxRepo.GetQuery().Any(x => x.Id == model.BoxId && x.UserId == model.UserId))
+                throw new Exception("Item Not Found!");
+
             var entity = new Question
             {
                 BoxId = model.BoxId,
@@ -78,9 +81,9 @@ namespace AllInOne.Services.Implementation.LeitnerBox
         public async Task<List<QuestionModel>> GetAllQuestionsAsync(long userId)
         {
             return await questionRepo.GetQuery()
-                .ToAsyncEnumerable()
                 .Where(x => x.Box.UserId == userId)
                 .Select(ConvertEntityToQuestionModel)
+                .ToAsyncEnumerable()
                 .ToList();
         }
 
@@ -115,7 +118,7 @@ namespace AllInOne.Services.Implementation.LeitnerBox
 
             foreach (var question in result)
             {
-                var maxStage = Math.Pow(question.MainStage, question.MainStage - 1);
+                var maxStage = Math.Pow(2, question.MainStage - 1);
                 if (question.SubStage == maxStage)
                 {
                     question.QuestionHistory.Add(new QuestionHistory
@@ -136,7 +139,7 @@ namespace AllInOne.Services.Implementation.LeitnerBox
                         FromSubStage = question.SubStage,
                         HistoryActionType = HistoryActionType.AutoNextStage,
                         ToMainStage = question.MainStage,
-                        ToSubStage = question.SubStage++
+                        ToSubStage = ++question.SubStage
                     });
                 }
             }
@@ -150,14 +153,15 @@ namespace AllInOne.Services.Implementation.LeitnerBox
         {
             var entity = await questionRepo.FirstAsync(x =>
                 x.Id == model.Id
-                && x.Box.UserId == userId);
+                && x.Box.UserId == userId
+                && x.IsPending);
             if (entity == null) throw new Exception("Item Not Found!");
 
             entity.IsPending = false;
 
             if (model.IsSuccess)
             {
-                if (entity.MainStage == 6)
+                if (entity.MainStage == 5)
                     entity.IsFinished = true;
                 else
                 {
@@ -166,7 +170,7 @@ namespace AllInOne.Services.Implementation.LeitnerBox
                         FromMainStage = entity.MainStage,
                         FromSubStage = entity.SubStage,
                         HistoryActionType = HistoryActionType.Success,
-                        ToMainStage = entity.MainStage++,
+                        ToMainStage = ++entity.MainStage,
                         ToSubStage = entity.SubStage = 1
                     });
                 }
@@ -187,6 +191,25 @@ namespace AllInOne.Services.Implementation.LeitnerBox
             await unitOfWork.CommitAsync();
 
             return true;
+        }
+
+        public async Task<List<QuestionQueModel>> GetQuestionQueAsync(long boxId, long userId)
+        {
+            var result = await questionRepo.GetQuery()
+                .Where(x =>
+                    x.BoxId == boxId
+                    && x.Box.UserId == userId
+                    && x.IsPending)
+                .GroupBy(x => x.MainStage)
+                .ToAsyncEnumerable()
+                .Select(x => new QuestionQueModel
+                {
+                    Stage = x.Key,
+                    Questions = x.Select(ConvertEntityToQuestionModel).ToList()
+                })
+                .ToList();
+
+            return result;
         }
 
         private QuestionModel ConvertEntityToQuestionModel(Question entity)

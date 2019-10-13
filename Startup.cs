@@ -87,6 +87,7 @@ namespace AllInOne
             services.AddScoped<IAccountLib, AccountLib>();
             //LeitnerBox
             services.AddScoped<IBoxLib, BoxLib>();
+            services.AddScoped<IQuestionLib, QuestionLib>();
             //Security
             services.AddScoped<IUserLib, UserLib>();
             //Todo

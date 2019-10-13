@@ -13,5 +13,6 @@ namespace AllInOne.Services.Contract.LeitnerBox
         Task<List<QuestionModel>> GetAllQuestionsAsync(long userId);
         Task<bool> ProcessBoxAsync(long boxId, long userId);
         Task<bool> ProcessQuestionAsync(ProcessQuestionModel model, long userId);
+        Task<List<QuestionQueModel>> GetQuestionQueAsync(long boxId, long userId);
     }
 }
