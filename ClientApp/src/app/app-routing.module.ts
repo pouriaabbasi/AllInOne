@@ -5,6 +5,7 @@ import { AppLayoutComponent } from './_layouts/app-layout/app-layout.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { TodoComponent } from './pages/todo/todo.component';
+import { BoxDashboardComponent } from './pages/box-dashboard/box-dashboard.component';
 
 
 const routes: Routes = [
@@ -13,7 +14,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: AppLayoutComponent,
     children: [
-      { path: 'todo/:id', component: TodoComponent }
+      { path: 'todo/:id', component: TodoComponent },
+      { path: 'box-dashboard/:id', component: BoxDashboardComponent }
     ]
   },
   { path: 'login', component: LoginComponent },

@@ -5,6 +5,8 @@ import { TodoService } from 'src/app/services/todo.service';
 import { BaseComponent } from '../base/base.component';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { LeitnerService } from 'src/app/services/leitner.service';
+import { LeitnerBoxModel } from 'src/app/models/leitner.model';
 
 @Component({
   selector: 'app-main-sidebar',
@@ -16,12 +18,15 @@ export class MainSidebarComponent extends BaseComponent implements OnInit {
   fullName = '';
   newListName = '';
   newGroupName = '';
+  newBoxName = '';
   todoMenu = new TodoMenu();
+  leitnerBoxes: LeitnerBoxModel[] = [];
 
   constructor(
     protected toastr: ToastrService,
     private securityService: SecurityService,
     private todoService: TodoService,
+    private leitnerService: LeitnerService,
     private router: Router
   ) {
     super(toastr);
@@ -30,6 +35,7 @@ export class MainSidebarComponent extends BaseComponent implements OnInit {
   ngOnInit() {
     this.fullName = `${this.securityService.currentUserValue.firstName} ${this.securityService.currentUserValue.lastName}`;
     this.getLists();
+    this.getBoxes();
   }
 
   private getLists() {
@@ -41,6 +47,15 @@ export class MainSidebarComponent extends BaseComponent implements OnInit {
       });
   }
 
+  private getBoxes() {
+    this.leitnerService.getBoxes()
+      .subscribe(boxes => {
+        if (boxes) {
+          this.leitnerBoxes = boxes;
+        }
+      });
+  }
+
   public addNewList() {
     this.todoService.addList(this.newListName)
       .subscribe(result => {
@@ -48,6 +63,17 @@ export class MainSidebarComponent extends BaseComponent implements OnInit {
           this.newListName = '';
           this.todoMenu.lists.push(result);
           this.showSuccess('Add List', 'Your list was added');
+        }
+      });
+  }
+
+  public addNewBox() {
+    this.leitnerService.addBox(this.newBoxName)
+      .subscribe(result => {
+        if (result) {
+          this.newBoxName = '';
+          this.leitnerBoxes.push(result);
+          this.showSuccess('Add Box', 'Your box was added');
         }
       });
   }
@@ -75,10 +101,27 @@ export class MainSidebarComponent extends BaseComponent implements OnInit {
       });
   }
 
+  public removeBox(boxId: number) {
+    this.leitnerService.removeBox(boxId)
+      .subscribe(result => {
+        if (result) {
+          const boxIndex = this.leitnerBoxes.findIndex(x => x.id === boxId);
+          this.leitnerBoxes.splice(boxIndex, 1);
+          this.showSuccess('Delete Box', 'Your box was deleted');
+          this.router.navigate(['/']);
+        }
+      });
+  }
+
   public showInfo(listId) {
     const listName = listId === 0
       ? 'Tasks'
       : this.todoMenu.lists.find(x => x.id === listId).name;
     super.showInfo('Change List', `list '${listName}' selected`);
+  }
+
+  public showBoxInfo(boxId) {
+    const boxName = this.leitnerBoxes.find(x => x.id === boxId).name;
+    super.showInfo('Change Box', `box '${boxName}' selected`);
   }
 }
