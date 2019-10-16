@@ -11,5 +11,6 @@ namespace AllInOne.Services.Contract.LeitnerBox
         Task<bool> DeleteBoxAsync(long boxId, long userId);
         Task<BoxModel> GetBoxAsync(long boxId, long userId);
         Task<List<BoxModel>> GetAllBoxAsync(long userId);
+        Task<BoxStatisticsModel> GetBoxStatisticsAsync(long boxId, long userId);
     }
 }

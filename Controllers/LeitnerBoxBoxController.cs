@@ -94,5 +94,19 @@ namespace AllInOne.Controllers
                 return CustomError(exp);
             }
         }
+
+        [HttpGet("{boxId}")]
+        public async Task<IActionResult> GetBoxStatistics(long boxId)
+        {
+            try
+            {
+                var result = await boxLib.GetBoxStatisticsAsync(boxId, CurrentUserId);
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
     }
 }

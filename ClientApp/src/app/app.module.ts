@@ -20,6 +20,8 @@ import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { BoxDashboardComponent } from './pages/box-dashboard/box-dashboard.component';
+import { QuestionComponent } from './pages/question/question.component';
+import { AnswerQuestionComponent } from './pages/answer-question/answer-question.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { BoxDashboardComponent } from './pages/box-dashboard/box-dashboard.compo
     RegisterComponent,
     TodoComponent,
     BaseComponent,
-    BoxDashboardComponent
+    BoxDashboardComponent,
+    QuestionComponent,
+    AnswerQuestionComponent
   ],
   imports: [
     HttpClientModule,

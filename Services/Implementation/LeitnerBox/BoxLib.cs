@@ -89,6 +89,30 @@ namespace AllInOne.Services.Implementation.LeitnerBox
             return ConvertEntityToBoxModel(entity);
         }
 
+
+        public async Task<BoxStatisticsModel> GetBoxStatisticsAsync(long boxId, long userId)
+        {
+            var entity = await boxRepo.FirstAsync(x =>
+                x.Id == boxId
+                && x.UserId == userId);
+            if (entity == null) throw new Exception("Item Not Found!");
+
+            var groupedData = entity.Questions.GroupBy(x => x.MainStage);
+
+            var result = new BoxStatisticsModel
+            {
+                BoxName = entity.Name,
+                AllQuestionCount = entity.Questions.Count,
+                ReadyForTestCount = entity.Questions.Count(x => x.IsPending),
+                CompeletedQuestionCount = entity.Questions.Count(x => x.IsFinished),
+                FailCount = entity.Questions.Sum(x => x.FailCount),
+                Labels = groupedData.OrderBy(x=>x.Key).Select(x => $"Stage {x.Key}").ToList(),
+                Counts = groupedData.OrderBy(x=>x.Key).Select(x => x.Count()).ToList()
+            };
+
+            return result;
+        }
+
         private BoxModel ConvertEntityToBoxModel(Box entity)
         {
             return new BoxModel

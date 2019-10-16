@@ -12,7 +12,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class TodoComponent extends BaseComponent implements OnInit {
 
-  listName = '';
 
   constructor(
     protected toastr: ToastrService,
@@ -22,90 +21,89 @@ export class TodoComponent extends BaseComponent implements OnInit {
     super(toastr);
   }
 
+  listName = '';
   items: ItemModel[] = [];
   newItemModel: AddItemModel = new AddItemModel();
 
   ngOnInit() {
-    this.getListInfo();
-    this.fetchData();
-  }
-
-  public addItem() {
     this.route.paramMap.subscribe(params => {
       const listId = params.get('id');
-      this.newItemModel.listId = listId === '0' ? null : Number(listId);
-      this.todoService.addItem(this.newItemModel)
-        .subscribe(result => {
-          if (result) {
-            this.showSuccess('Add Item', 'Your item was added');
-            this.fetchData();
-          }
-        });
+      this.getListInfo(listId);
+      this.fetchData(listId);
     });
   }
 
+  public addItem() {
+    const listId = this.route.snapshot.paramMap.get('id');
+    this.newItemModel.listId = listId === '0' ? null : Number(listId);
+    this.todoService.addItem(this.newItemModel)
+      .subscribe(result => {
+        if (result) {
+          this.showSuccess('Add Item', 'Your item was added');
+          this.fetchData(listId);
+        }
+      });
+  }
+
   public changeItemStatus(itemId: number) {
+    const listId = this.route.snapshot.paramMap.get('id');
     this.todoService.changeItemStatus(itemId)
       .subscribe(result => {
         if (result) {
           this.showSuccess('Change Item\' Status', 'Your item\'s status was changed');
-          this.fetchData();
+          this.fetchData(listId);
         }
       });
   }
 
   public deleteItem(itemId: number) {
+    const listId = this.route.snapshot.paramMap.get('id');
     this.todoService.deleteItem(itemId)
       .subscribe(result => {
         if (result) {
           this.showSuccess('Delete Item', 'Your item was deleted');
-          this.fetchData();
+          this.fetchData(listId);
         }
       });
   }
 
   public editItem(itemId: number, itemName: string) {
+    const listId = this.route.snapshot.paramMap.get('id');
     this.todoService.editItem(itemId, itemName)
       .subscribe(result => {
         if (result) {
           this.showSuccess('Edit Item', 'Your item was edited');
-          this.fetchData();
+          this.fetchData(listId);
         }
       });
   }
 
-  private fetchData() {
-    this.route.paramMap.subscribe(params => {
-      const listId = params.get('id');
-      if (listId !== '0') {
-        this.todoService.getListItems(listId)
-          .subscribe(result => {
-            this.items = result;
-            this.newItemModel = new AddItemModel();
-          });
-      } else {
-        this.todoService.getOrphanItems()
-          .subscribe(result => {
-            this.items = result;
-            this.newItemModel = new AddItemModel();
-          });
-      }
-    });
+  private fetchData(listId: string) {
+    if (listId !== '0') {
+      this.todoService.getListItems(listId)
+        .subscribe(result => {
+          this.items = result;
+          this.newItemModel = new AddItemModel();
+        });
+    } else {
+      this.todoService.getOrphanItems()
+        .subscribe(result => {
+          this.items = result;
+          this.newItemModel = new AddItemModel();
+        });
+    }
   }
 
-  private getListInfo() {
-    this.route.paramMap.subscribe(params => {
-      const listId = params.get('id');
-      if (listId !== '0') {
-        this.todoService.getList(Number(listId))
-          .subscribe(list => {
-            if (list) {
-              this.listName = list.name;
-            }
-          });
-      } else {
-        this.listName = 'Tasks';
-      }
-    });
+  private getListInfo(listId: string) {
+    if (listId !== '0') {
+      this.todoService.getList(Number(listId))
+        .subscribe(list => {
+          if (list) {
+            this.listName = list.name;
+          }
+        });
+    } else {
+      this.listName = 'Tasks';
+    }
   }
 }
