@@ -4,8 +4,10 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
 import { LeitnerService } from 'src/app/services/leitner.service';
 import { Chart } from 'chart.js';
-import { LeitnerBoxStatisticsModel, QuestionModel } from 'src/app/models/leitner.model';
-import * as $ from 'jquery';
+import { LeitnerBoxStatisticsModel } from 'src/app/models/leitner.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { QuestionComponent } from '../question/question.component';
+import { AnswerQuestionComponent } from '../answer-question/answer-question.component';
 
 
 @Component({
@@ -20,6 +22,7 @@ export class BoxDashboardComponent extends BaseComponent implements OnInit {
   constructor(
     protected toastr: ToastrService,
     private route: ActivatedRoute,
+    private modalService: NgbModal,
     private leitnerService: LeitnerService
   ) {
     super(toastr);
@@ -27,8 +30,6 @@ export class BoxDashboardComponent extends BaseComponent implements OnInit {
 
   statistics = new LeitnerBoxStatisticsModel();
   boxId = '0';
-  question = new QuestionModel();
-  questions: QuestionModel[] = [];
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -89,17 +90,29 @@ export class BoxDashboardComponent extends BaseComponent implements OnInit {
       });
   }
 
-  public AddQuestion() {
+  public openQuestion() {
     const boxId = this.route.snapshot.paramMap.get('id');
-    console.log(boxId);
-    this.question.boxId = Number(boxId);
-    this.leitnerService.addQuestion(this.question)
-      .subscribe(result => {
-        if (result) {
-          this.fetchStatistics(boxId);
-          this.question = new QuestionModel();
-          super.showSuccess('Add Question', 'Question add successfuly');
-        }
-      });
+    const modalRef = this.modalService.open(QuestionComponent, {
+      centered: true
+    });
+    modalRef.componentInstance.boxId = boxId;
+    modalRef.result.then(result => {
+      if (result) {
+        this.fetchStatistics(boxId);
+      }
+    }, () => { });
+  }
+
+  public openAnswerQuestion() {
+    const boxId = this.route.snapshot.paramMap.get('id');
+    const modalRef = this.modalService.open(AnswerQuestionComponent, {
+      centered: true
+    });
+    modalRef.componentInstance.boxId = boxId;
+    modalRef.result.then(result => {
+      if (result) {
+        this.fetchStatistics(boxId);
+      }
+    }, () => { });
   }
 }

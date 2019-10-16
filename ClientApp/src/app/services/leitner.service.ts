@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base/base.service';
 import { Observable } from 'rxjs';
-import { LeitnerBoxModel, LeitnerBoxStatisticsModel, QuestionModel } from '../models/leitner.model';
+import { LeitnerBoxModel, LeitnerBoxStatisticsModel, AddQuestionModel, QuestionQueModel, ProcessQuestionModel } from '../models/leitner.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +35,15 @@ export class LeitnerService extends BaseService {
     return super.get(`LeitnerBoxQuestion/ProcessBox/${boxId}`);
   }
 
-  public addQuestion(model: QuestionModel): Observable<QuestionModel> {
+  public addQuestion(model: AddQuestionModel): Observable<AddQuestionModel> {
     return super.post('LeitnerBoxQuestion/AddQuestion', model);
+  }
+
+  public getQuestionQue(boxId: number): Observable<QuestionQueModel[]> {
+    return super.get(`LeitnerBoxQuestion/GetQuestionQue/${boxId}`);
+  }
+
+  public processQuestion(model: ProcessQuestionModel): Observable<boolean> {
+    return super.post('LeitnerBoxQuestion/ProcessQuestion', model);
   }
 }

@@ -22,6 +22,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BoxDashboardComponent } from './pages/box-dashboard/box-dashboard.component';
 import { QuestionComponent } from './pages/question/question.component';
 import { AnswerQuestionComponent } from './pages/answer-question/answer-question.component';
+import { NgbModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -46,12 +47,18 @@ import { AnswerQuestionComponent } from './pages/answer-question/answer-question
     AppRoutingModule,
     CommonModule,
     BrowserAnimationsModule,
+    NgbModule,
+    NgbModalModule,
     ToastrModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
-  bootstrap: [NoneLayoutComponent]
+  bootstrap: [NoneLayoutComponent],
+  entryComponents: [
+    QuestionComponent,
+    AnswerQuestionComponent
+  ]
 })
 export class AppModule { }

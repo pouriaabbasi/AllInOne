@@ -1,7 +1,19 @@
-<div class="scene scene--card">
-    <div class="card">
-        <div class="card__face card__face--front">front</div>
-        <div class="card__face card__face--back">back</div>
+<div class="box box-warning">
+    <div class="box-header with-border">
+        <h3 class="box-title">Answer Questions</h3>
+    </div>
+    <div class="box-body">
+        <div class="scene scene--card">
+            <div [ngClass]="isFace ? 'card' : 'card is-flipped'" (click)="changeFace()">
+                <div class="card__face card__face--front">{{currentQuestion.vocabulary}}</div>
+                <div class="card__face card__face--back">{{currentQuestion.meaning}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+        <button class="btn btn-default" (click)="cancel()">Cancel</button>
+        <button class="btn btn-success pull-right" *ngIf="!isFinished" (click)="success()">Success <i class="fa fa-thumbs-o-up"></i></button>
+        <button class="btn btn-danger pull-right" *ngIf="!isFinished" (click)="fail()">Fail <i class="fa fa-thumbs-o-down"></i></button>
+        <button class="btn btn-primary pull-right" *ngIf="isFinished" (click)="submit()">Submit</button>
     </div>
 </div>
-<p>Click card to flip.</p>
