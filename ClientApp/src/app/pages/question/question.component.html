@@ -2,24 +2,24 @@
     <div class="box-header with-border">
         <h3 class="box-title">Add Question</h3>
     </div>
-    <div class="form-horizontal">
-        <div class="box-body">
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Vocabulary</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="Vocabulary" required [(ngModel)]="model.vocabulary">
+    <div class="form-horizontal" (keyup.enter)="addQuestion()">
+        <div class="box-body ">
+            <div class="form-group ">
+                <label class="col-sm-2 control-label ">Vocabulary</label>
+                <div class="col-sm-10 ">
+                    <input type="text " class="form-control " placeholder="Vocabulary " required [(ngModel)]="model.vocabulary ">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Meaning</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="Meaning" required [(ngModel)]="model.meaning">
+            <div class="form-group ">
+                <label class="col-sm-2 control-label ">Meaning</label>
+                <div class="col-sm-10 ">
+                    <input type="text " class="form-control " placeholder="Meaning " required [(ngModel)]="model.meaning ">
                 </div>
             </div>
         </div>
-        <div class="box-footer">
-            <button class="btn btn-default" (click)="cancel()">Cancel</button>
-            <button class="btn btn-primary pull-right" (click)="addQuestion()">Submit</button>
+        <div class="box-footer ">
+            <button class="btn btn-default " (click)="cancel() ">Cancel</button>
+            <button class="btn btn-primary pull-right " (click)="addQuestion() ">Submit</button>
         </div>
     </div>
 </div>

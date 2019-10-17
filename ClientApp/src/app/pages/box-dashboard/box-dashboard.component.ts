@@ -18,6 +18,8 @@ import { AnswerQuestionComponent } from '../answer-question/answer-question.comp
 export class BoxDashboardComponent extends BaseComponent implements OnInit {
   @ViewChild('revenueLineChart', null) chart: ElementRef;
 
+  myChart: Chart;
+
 
   constructor(
     protected toastr: ToastrService,
@@ -46,35 +48,33 @@ export class BoxDashboardComponent extends BaseComponent implements OnInit {
   }
 
   private createChart(labels: string[], counts: number[]) {
+    if (this.myChart) {
+      this.myChart.destroy();
+    }
     const ctx = this.chart.nativeElement.getContext('2d');
-    const revenueLineChart = new Chart(ctx, {
-      type: 'bar',
+    this.myChart = new Chart(ctx, {
+      type: 'doughnut',
       data: {
         labels,
         datasets: [{
           // label: 'stages',
           data: counts,
           backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(255, 205, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(54, 162, 235, 0.2)'
+            'rgb(178,34,34)',
+            'rgb(255,99,71)',
+            'rgb(255,215,0)',
+            'rgb(64,224,208)',
+            'rgb(0,255,127)'
           ],
           borderColor: [
-            'rgb(255, 99, 132)',
-            'rgb(255, 159, 64)',
-            'rgb(255, 205, 86)',
-            'rgb(75, 192, 192)',
-            'rgb(54, 162, 235)'
+            'rgb(139,0,0)',
+            'rgb(255,69,0)',
+            'rgb(255,165,0)',
+            'rgb(70,130,180)',
+            'rgb(34,139,34)'
           ],
           borderWidth: 2
         }]
-      },
-      options: {
-        legend: {
-          display: false
-        },
       }
     });
   }

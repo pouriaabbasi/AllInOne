@@ -41,4 +41,10 @@ export class QuestionComponent extends BaseComponent implements OnInit {
         }
       });
   }
+
+  public keyPress(event) {
+    if (event.keyCode === 13) {
+      this.addQuestion();
+    }
+  }
 }
