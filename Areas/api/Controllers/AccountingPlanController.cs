@@ -1,14 +1,15 @@
 using System.Threading.Tasks;
-using AllInOne.Controllers.Base;
-using AllInOne.Models.Accounting.Account;
+using AllInOne.Areas.api.Controllers.Base;
 using AllInOne.Models.Accounting.Plan;
 using AllInOne.Services.Contract.Accounting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AllInOne.Controllers
+namespace AllInOne.Areas.api.Controllers
 {
+    // [Route("api/[controller]/[action]")]
     [Route("api/[controller]/[action]")]
+    [Area("api")]
     [ApiController]
     [Authorize]
     public class AccountingPlanController : BaseController

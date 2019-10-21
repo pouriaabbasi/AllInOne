@@ -1,11 +1,13 @@
 using System.Text;
 using AllInOne.Data;
 using AllInOne.Services.Contract.Accounting;
+using AllInOne.Services.Contract.Bot;
 using AllInOne.Services.Contract.LeitnerBox;
 using AllInOne.Services.Contract.Security;
 using AllInOne.Services.Contract.Todo;
 using AllInOne.Services.Helpers;
 using AllInOne.Services.Implementation.Accounting;
+using AllInOne.Services.Implementation.Bot;
 using AllInOne.Services.Implementation.LeitnerBox;
 using AllInOne.Services.Implementation.Security;
 using AllInOne.Services.Implementation.Todo;
@@ -79,10 +81,13 @@ namespace AllInOne
                 c.OperationFilter<SwaggerHeaderFilter>();
             });
 
+            services.Configure<BotConfiguration>(Configuration.GetSection("BotConfiguration"));
+
             services.AddScoped<DbContext, ApplicationContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+            #region api
             //Accounting
             services.AddScoped<IAccountLib, AccountLib>();
             //LeitnerBox
@@ -94,6 +99,12 @@ namespace AllInOne
             services.AddScoped<IGroupLib, GroupLib>();
             services.AddScoped<IListLib, ListLib>();
             services.AddScoped<IItemLib, ItemLib>();
+            #endregion
+
+            #region bot
+            services.AddScoped<IUpdateService, UpdateService>();
+            services.AddSingleton<IBotService, BotService>();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -129,6 +140,10 @@ namespace AllInOne
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller}/{action}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");

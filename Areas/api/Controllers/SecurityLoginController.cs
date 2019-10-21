@@ -1,13 +1,15 @@
 using System.Threading.Tasks;
-using AllInOne.Controllers.Base;
+using AllInOne.Areas.api.Controllers.Base;
 using AllInOne.Models.Security;
 using AllInOne.Services.Contract.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AllInOne.Controllers
+namespace AllInOne.Areas.api.Controllers
 {
+    // [Route("api/[controller]/[action]")]
     [Route("api/[controller]/[action]")]
+    [Area("api")]
     [ApiController]
     [Authorize]
     public class SecurityLoginController : BaseController
