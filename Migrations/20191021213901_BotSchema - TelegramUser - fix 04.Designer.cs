@@ -4,14 +4,16 @@ using AllInOne.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AllInOne.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191021213901_BotSchema - TelegramUser - fix 04")]
+    partial class BotSchemaTelegramUserfix04
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,7 +143,9 @@ namespace AllInOne.Migrations
 
             modelBuilder.Entity("AllInOne.Data.Entity.Bot.TelegramUser", b =>
                 {
-                    b.Property<long>("Id");
+                    b.Property<int>("tempId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("ChatId");
 
@@ -159,7 +163,7 @@ namespace AllInOne.Migrations
                     b.Property<string>("Username")
                         .HasMaxLength(100);
 
-                    b.HasKey("Id");
+                    b.HasKey("tempId");
 
                     b.HasIndex("UserId");
 

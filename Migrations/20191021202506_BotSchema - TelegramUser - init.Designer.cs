@@ -4,14 +4,16 @@ using AllInOne.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AllInOne.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191021202506_BotSchema - TelegramUser - init")]
+    partial class BotSchemaTelegramUserinit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,29 +143,25 @@ namespace AllInOne.Migrations
 
             modelBuilder.Entity("AllInOne.Data.Entity.Bot.TelegramUser", b =>
                 {
-                    b.Property<long>("Id");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("ChatId");
+                    b.Property<string>("FirstName");
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(100);
+                    b.Property<string>("LanguageCode");
 
-                    b.Property<string>("LanguageCode")
-                        .HasMaxLength(100);
+                    b.Property<string>("LastName");
 
-                    b.Property<string>("LastName")
-                        .HasMaxLength(100);
+                    b.Property<long>("UserId");
 
-                    b.Property<long?>("UserId");
-
-                    b.Property<string>("Username")
-                        .HasMaxLength(100);
+                    b.Property<string>("Username");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TelegramUser","Bot");
+                    b.ToTable("TelegramUser");
                 });
 
             modelBuilder.Entity("AllInOne.Data.Entity.LeitnerBox.Box", b =>
@@ -399,7 +397,8 @@ namespace AllInOne.Migrations
                 {
                     b.HasOne("AllInOne.Data.Entity.Security.User", "User")
                         .WithMany("TelegramUsers")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AllInOne.Data.Entity.LeitnerBox.Box", b =>

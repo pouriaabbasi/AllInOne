@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using AllInOne.Data.Entity.Accounting;
+using AllInOne.Data.Entity.Bot;
 using AllInOne.Data.Entity.LeitnerBox;
 using AllInOne.Data.Entity.Todo;
 
@@ -29,5 +30,6 @@ namespace AllInOne.Data.Entity.Security
         public virtual ICollection<Transaction> Transactions { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Box> Boxes { get; set; }
+        public virtual ICollection<TelegramUser> TelegramUsers { get; set; }
     }
 }

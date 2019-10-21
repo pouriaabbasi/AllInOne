@@ -103,7 +103,7 @@ namespace AllInOne
 
             #region bot
             services.AddScoped<IUpdateService, UpdateService>();
-            services.AddSingleton<IBotService, BotService>();
+            services.AddScoped<IBotService, BotService>();
             #endregion
         }
 
