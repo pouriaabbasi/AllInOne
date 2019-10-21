@@ -3,11 +3,28 @@
         <h3 class="box-title">Answer Questions</h3>
     </div>
     <div class="box-body">
-        <div class="scene scene--card">
-            <div [ngClass]="isFace ? 'card' : 'card is-flipped'" (click)="changeFace()">
-                <div class="card__face card__face--front">{{currentQuestion.vocabulary}}</div>
-                <div class="card__face card__face--back">{{currentQuestion.meaning}}</div>
+        <div class="col col-md-4" style="text-align: start;">
+            <h5>Total Questions : {{totalCurrentIndex}}/{{totalQuestions}}</h5>
+        </div>
+        <div class="col col-md-4" style="text-align: center;">
+            <h5>Stage : {{currentStage?.stage}}</h5>
+        </div>
+        <div class="col col-md-4" style="text-align: end;">
+            <h5>Question : {{currentQuestionIndex}}/{{currentStage?.questions?.length}}</h5>
+        </div>
+        <div class="col col-md-12">
+            <div class="scene scene--card">
+                <div [ngClass]="isFace ? 'card' : 'card is-flipped'" (click)="changeFace()">
+                    <div class="card__face card__face--front">{{currentQuestion.vocabulary}}</div>
+                    <div class="card__face card__face--back">{{currentQuestion.meaning}}</div>
+                </div>
             </div>
+        </div>
+        <div class="col col-md-6" style="text-align: start;">
+            <h5>Success : {{successCount}}/{{totalCurrentIndex-1}}({{successPercentage | number:'1.1-2'}}%)</h5>
+        </div>
+        <div class="col col-md-6" style="text-align: end;">
+            <h5>Fail : {{failCount}}/{{totalCurrentIndex-1}}({{failPercentage | number:'1.1-2'}}%)</h5>
         </div>
     </div>
     <div class="box-footer">

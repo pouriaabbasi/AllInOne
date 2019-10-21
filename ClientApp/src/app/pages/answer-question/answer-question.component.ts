@@ -21,8 +21,14 @@ export class AnswerQuestionComponent extends BaseComponent implements OnInit {
   answerdQuestions: ProcessQuestionModel[] = [];
   currentStageIndex = 0;
   currentQuestionIndex = 0;
+  totalQuestions = 0;
+  totalCurrentIndex = 0;
   isFinished = false;
   isFace = true;
+  successCount = 0;
+  successPercentage = 0;
+  failCount = 0;
+  failPercentage = 0;
 
   constructor(
     protected toastr: ToastrService,
@@ -41,6 +47,9 @@ export class AnswerQuestionComponent extends BaseComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           this.questionQues = result;
+          result.forEach(x => {
+            this.totalQuestions += x.questions.length;
+          });
           this.getNextQuestion();
           super.showInfo('Ready', 'Your questions are ready, Good Luck!');
         }
@@ -50,6 +59,7 @@ export class AnswerQuestionComponent extends BaseComponent implements OnInit {
   private getNextQuestion() {
     if (this.hasQuestion()) {
       this.currentQuestion = this.currentStage.questions[this.currentQuestionIndex++];
+      this.totalCurrentIndex++;
     } else if (this.hasStage()) {
       this.getNextStage();
       this.getNextQuestion();
@@ -61,11 +71,12 @@ export class AnswerQuestionComponent extends BaseComponent implements OnInit {
   private setFinish() {
     this.isFinished = true;
     this.isFace = true;
-    this.currentQuestion.vocabulary = 'Your Test Is Finished, Thank you!';
+    this.currentQuestion.vocabulary = 'Your Test Is Finished ;)';
   }
 
   private getNextStage() {
     this.currentStage = this.questionQues[this.currentStageIndex++];
+    this.currentQuestionIndex = 0;
   }
 
   private hasQuestion(): boolean {
@@ -92,6 +103,8 @@ export class AnswerQuestionComponent extends BaseComponent implements OnInit {
   public success() {
     const timeout = this.isFace ? 0 : 1000;
     this.isFace = true;
+    this.successCount++;
+    this.successPercentage = (100 * this.successCount) / this.totalQuestions;
     setTimeout(() => {
       this.answerdQuestions.push({
         id: this.currentQuestion.id,
@@ -104,6 +117,8 @@ export class AnswerQuestionComponent extends BaseComponent implements OnInit {
   public fail() {
     const timeout = this.isFace ? 0 : 1000;
     this.isFace = true;
+    this.failCount++;
+    this.failPercentage = (100 * this.failCount) / this.totalQuestions;
     setTimeout(() => {
       this.answerdQuestions.push({
         id: this.currentQuestion.id,

@@ -7,6 +7,7 @@ using AllInOne.Data.Entity.LeitnerBox;
 using AllInOne.Data.Entity.LeitnerBox.Enums;
 using AllInOne.Models.LeitnerBox.Question;
 using AllInOne.Services.Contract.LeitnerBox;
+using AllInOne.Services.Helpers;
 
 namespace AllInOne.Services.Implementation.LeitnerBox
 {
@@ -205,7 +206,7 @@ namespace AllInOne.Services.Implementation.LeitnerBox
                 .Select(x => new QuestionQueModel
                 {
                     Stage = x.Key,
-                    Questions = x.Select(ConvertEntityToQuestionModel).ToList()
+                    Questions = x.Select(ConvertEntityToQuestionModel).ToList().Shuffle()
                 })
                 .ToList();
 
