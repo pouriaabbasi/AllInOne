@@ -38,6 +38,10 @@ namespace AllInOne.Services.Implementation.Bot
             var message = update.Message;
             var userModel = await GetTelegramUser(message.From, message.Chat.Id);
             if (userModel.NeedLogin) await LoginUser(userModel, message);
+            else
+            {
+                await botService.Client.SendTextMessageAsync(userModel.ChatId, $"Welcome dear {userModel.FirstName} {userModel.LastName}");
+            }
         }
 
         private async Task LoginUser(TelegramUserModel telegramUser, Message message)

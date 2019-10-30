@@ -31,10 +31,10 @@ namespace AllInOne.Services.Implementation.Security
 
         public async Task<UserModel> LoginAsync(LoginModel model)
         {
-            var password = model.Password.HashPassword(model.Username);
+            
             var user = await userRepo.FirstAsync(x =>
                 x.Username == model.Username
-                && x.Password == password);
+                && x.Password == model.Password);
 
             if (user == null) throw new Exception("Username or Password is not valid");
 

@@ -1,8 +1,33 @@
+using AllInOne.Services.Helpers;
+
 namespace AllInOne.Models.Security
 {
     public class LoginModel
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        private string _username;
+        private string _password;
+
+        public string Username
+        {
+            get
+            {
+                return _username.ToLower();
+            }
+            set
+            {
+                _username = value;
+            }
+        }
+        public string Password
+        {
+            get
+            {
+                return _password.HashPassword(this.Username);
+            }
+            set
+            {
+                _password = value;
+            }
+        }
     }
 }
