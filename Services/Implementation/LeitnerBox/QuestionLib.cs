@@ -31,6 +31,12 @@ namespace AllInOne.Services.Implementation.LeitnerBox
             if (!boxRepo.GetQuery().Any(x => x.Id == model.BoxId && x.UserId == model.UserId))
                 throw new Exception("Item Not Found!");
 
+            var isDuplicate =
+                boxRepo.FirstAsync(x => x.Id == model.BoxId).Result
+                .Questions.Any(x => x.Vocabulary.ToLower() == model.Vocabulary.ToLower());
+            if (isDuplicate)
+                throw new Exception("This Question is duplicated!");
+
             var entity = new Question
             {
                 BoxId = model.BoxId,
