@@ -7,5 +7,7 @@ namespace AllInOne.Services.Contract.Movie
     public interface IMovieLib
     {
         Task<ImdbSearchModel> ImdbSearch(InputImdbSearchModel model);
+        Task<ImdbMovieModel> ImdbGetInfoById(string imdbId);
+        Task<bool> AddMovieFromImdb(string imdbId, long currentUserId);
     }
 }

@@ -14,7 +14,7 @@ namespace AllInOne.Models.Movie.Movie
         //page
         public int Page { get; set; }
 
-        internal string CreateRequestUrl(string baseUrl, string omdbApiKey)
+        internal string CreateRequestUrl(string baseUrl)
         {
             baseUrl += $"s={Name}";
             if (SearchType != 0)
@@ -23,7 +23,6 @@ namespace AllInOne.Models.Movie.Movie
                 baseUrl += $"&y={Year}";
             if (Page != 0)
                 baseUrl += $"&page={Page}";
-            baseUrl += $"&apiKey={omdbApiKey}";
             return baseUrl;
         }
     }

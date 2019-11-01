@@ -37,5 +37,35 @@ namespace AllInOne.Areas.api.Controllers
             {
                 return CustomError(exp);
             }
-        }}
+        }
+
+        [HttpPost("{imdbId}")]
+        public async Task<IActionResult> ImdbGetInfoById(string imdbId)
+        {
+            try
+            {
+                var result = await movieLib.ImdbGetInfoById(imdbId);
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
+
+
+        [HttpPost("{imdbId}")]
+        public async Task<IActionResult> AddMovieFromImdb(string imdbId)
+        {
+            try
+            {
+                var result = await movieLib.AddMovieFromImdb(imdbId, CurrentUserId);
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
+    }
 }
