@@ -6,6 +6,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { TodoComponent } from './pages/todo/todo.component';
 import { BoxDashboardComponent } from './pages/box-dashboard/box-dashboard.component';
+import { MyMoviesComponent } from './pages/my-movies/my-movies.component';
+import { SearchImdbMovieComponent } from './pages/search-imdb-movie/search-imdb-movie.component';
 
 
 const routes: Routes = [
@@ -15,7 +17,9 @@ const routes: Routes = [
     component: AppLayoutComponent,
     children: [
       { path: 'todo/:id', component: TodoComponent },
-      { path: 'box-dashboard/:id', component: BoxDashboardComponent }
+      { path: 'box-dashboard/:id', component: BoxDashboardComponent },
+      { path: 'my-movies', component: MyMoviesComponent },
+      { path: 'search-imdb-movies', component: SearchImdbMovieComponent }
     ]
   },
   { path: 'login', component: LoginComponent },

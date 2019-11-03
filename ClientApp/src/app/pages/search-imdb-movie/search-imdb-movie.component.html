@@ -1,0 +1,23 @@
+<section class="content-header">
+    <h1>
+        Search Movies From Imdb Resource
+    </h1>
+</section>
+<section class="content">
+    <div class="form-group">
+        <input type="text" class="form-control" (keyup.enter)="searchMovie()" [(ngModel)]="movieName">
+    </div>
+    <div class="row">
+        <div *ngFor="let movie of result.search" class="col col-md-4 card">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><b>{{movie.title}}</b></h3>
+                </div>
+                <div class="box-body">
+                    <img style="width: 300px; height: 430px;" src={{movie.poster}}>
+                    <p>{{movie.year}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

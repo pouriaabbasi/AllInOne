@@ -23,6 +23,9 @@ import { BoxDashboardComponent } from './pages/box-dashboard/box-dashboard.compo
 import { QuestionComponent } from './pages/question/question.component';
 import { AnswerQuestionComponent } from './pages/answer-question/answer-question.component';
 import { NgbModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { AgGridModule } from 'ag-grid-angular';
+import { MyMoviesComponent } from './pages/my-movies/my-movies.component';
+import { SearchImdbMovieComponent } from './pages/search-imdb-movie/search-imdb-movie.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,9 @@ import { NgbModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
     BaseComponent,
     BoxDashboardComponent,
     QuestionComponent,
-    AnswerQuestionComponent
+    AnswerQuestionComponent,
+    MyMoviesComponent,
+    SearchImdbMovieComponent
   ],
   imports: [
     HttpClientModule,
@@ -49,7 +54,8 @@ import { NgbModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
     BrowserAnimationsModule,
     NgbModule,
     NgbModalModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    AgGridModule.withComponents([])
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

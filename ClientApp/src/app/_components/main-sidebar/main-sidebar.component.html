@@ -63,8 +63,7 @@
                     </li> -->
                     <li>
                         <div class="form-group">
-                            <input type="text" class="form-control input-sm" placeholder="new list"
-                                (keyup.enter)="addNewList()" [(ngModel)]="newListName">
+                            <input type="text" class="form-control input-sm" placeholder="new list" (keyup.enter)="addNewList()" [(ngModel)]="newListName">
                         </div>
                     </li>
                 </ul>
@@ -91,9 +90,29 @@
                     </li>
                     <li>
                         <div class="form-group">
-                            <input type="text" class="form-control input-sm" placeholder="new box"
-                                (keyup.enter)="addNewBox()" [(ngModel)]="newBoxName">
+                            <input type="text" class="form-control input-sm" placeholder="new box" (keyup.enter)="addNewBox()" [(ngModel)]="newBoxName">
                         </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-tasks"></i> <span>Movies</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a [routerLink]="['/my-movies']">
+                            <i class="fa fa-film"></i>
+                            <span>My Movies</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/search-imdb-movies']">
+                            <i class="fa fa-film"></i>
+                            <span>Search Imdb Movies</span>
+                        </a>
                     </li>
                 </ul>
             </li>
