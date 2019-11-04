@@ -15,9 +15,14 @@
                 </div>
                 <div class="box-body">
                     <img style="width: 300px; height: 430px;" src={{movie.poster}}>
-                    <p>{{movie.year}}</p>
+                    <p>{{movie.year}} ({{movie.type}})</p>
+                    <button class="btn btn-block btn-default">Show Info</button>
+                    <button class="btn btn-block btn-primary">Add To My Movies</button>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="btn-group" *ngIf="result && result.search">
+        <button *ngFor="let page of pages" (click)="searchMovie(page)" [className]="currentPage==page ? 'btn btn-default active' : 'btn btn-default'">{{page}}</button>
     </div>
 </section>

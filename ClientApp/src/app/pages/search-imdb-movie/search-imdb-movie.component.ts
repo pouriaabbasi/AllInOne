@@ -10,6 +10,8 @@ import { ImdbSearchFilterModel, ImdbSearchResultModel } from 'src/app/models/mov
 export class SearchImdbMovieComponent implements OnInit {
 
   movieName = '';
+  currentPage: number;
+  pages: number[];
   result: ImdbSearchResultModel = new ImdbSearchResultModel();
 
   constructor(
@@ -19,12 +21,22 @@ export class SearchImdbMovieComponent implements OnInit {
   ngOnInit() {
   }
 
-  public searchMovie() {
+  public searchMovie(page: number) {
+    if (!page) {
+      this.currentPage = 1;
+    } else {
+      this.currentPage = page;
+    }
+
     const filterModel: ImdbSearchFilterModel = new ImdbSearchFilterModel();
     filterModel.name = this.movieName;
+    filterModel.page = this.currentPage;
     this.movieService.searchImdbMovie(filterModel)
       .subscribe(result => {
         this.result = result;
+        const totalPages = Math.ceil(this.result.totalResults / 10);
+        // totalPages += this.result.totalResults % 10 > 0 ? 1 : 0;
+        this.pages = Array(totalPages).fill(1).map((x, i) => (i + 1));
       });
   }
 
