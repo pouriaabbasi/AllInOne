@@ -26,6 +26,7 @@ import { NgbModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { AgGridModule } from 'ag-grid-angular';
 import { MyMoviesComponent } from './pages/my-movies/my-movies.component';
 import { SearchImdbMovieComponent } from './pages/search-imdb-movie/search-imdb-movie.component';
+import { MovieDetailComponent } from './pages/movie-detail/movie-detail.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { SearchImdbMovieComponent } from './pages/search-imdb-movie/search-imdb-
     QuestionComponent,
     AnswerQuestionComponent,
     MyMoviesComponent,
-    SearchImdbMovieComponent
+    SearchImdbMovieComponent,
+    MovieDetailComponent
   ],
   imports: [
     HttpClientModule,
@@ -64,7 +66,8 @@ import { SearchImdbMovieComponent } from './pages/search-imdb-movie/search-imdb-
   bootstrap: [NoneLayoutComponent],
   entryComponents: [
     QuestionComponent,
-    AnswerQuestionComponent
+    AnswerQuestionComponent,
+    MovieDetailComponent
   ]
 })
 export class AppModule { }

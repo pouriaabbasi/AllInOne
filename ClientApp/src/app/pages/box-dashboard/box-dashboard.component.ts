@@ -106,7 +106,8 @@ export class BoxDashboardComponent extends BaseComponent implements OnInit {
   public openAnswerQuestion() {
     const boxId = this.route.snapshot.paramMap.get('id');
     const modalRef = this.modalService.open(AnswerQuestionComponent, {
-      centered: true
+      centered: true,
+      backdrop: false
     });
     modalRef.componentInstance.boxId = boxId;
     modalRef.result.then(result => {

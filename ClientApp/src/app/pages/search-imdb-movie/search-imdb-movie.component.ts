@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from 'src/app/services/movie.service';
 import { ImdbSearchFilterModel, ImdbSearchResultModel } from 'src/app/models/movie.model';
+import { BaseComponent } from 'src/app/_components/base/base.component';
+import { ToastrService } from 'ngx-toastr';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MovieDetailComponent } from '../movie-detail/movie-detail.component';
 
 @Component({
   selector: 'app-search-imdb-movie',
   templateUrl: './search-imdb-movie.component.html',
   styleUrls: ['./search-imdb-movie.component.css']
 })
-export class SearchImdbMovieComponent implements OnInit {
+export class SearchImdbMovieComponent extends BaseComponent implements OnInit {
 
   movieName = '';
   currentPage: number;
@@ -15,8 +19,12 @@ export class SearchImdbMovieComponent implements OnInit {
   result: ImdbSearchResultModel = new ImdbSearchResultModel();
 
   constructor(
+    protected toastr: ToastrService,
+    private modalService: NgbModal,
     private movieService: MovieService
-  ) { }
+  ) {
+    super(toastr);
+  }
 
   ngOnInit() {
   }
@@ -35,9 +43,21 @@ export class SearchImdbMovieComponent implements OnInit {
       .subscribe(result => {
         this.result = result;
         const totalPages = Math.ceil(this.result.totalResults / 10);
-        // totalPages += this.result.totalResults % 10 > 0 ? 1 : 0;
         this.pages = Array(totalPages).fill(1).map((x, i) => (i + 1));
       });
+  }
+
+  public openMovieDetail(imdbId: string) {
+    const modalRef = this.modalService.open(MovieDetailComponent, {
+      centered: true,
+      size: 'lg'
+    });
+    modalRef.componentInstance.imdbId = imdbId;
+    modalRef.result.then(result => {
+      if (result) {
+        console.log('test');
+      }
+    }, () => { });
   }
 
 }

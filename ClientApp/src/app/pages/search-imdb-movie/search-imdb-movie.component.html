@@ -10,13 +10,13 @@
     <div class="row">
         <div *ngFor="let movie of result.search" class="col col-md-4 card">
             <div class="box box-default">
-                <div class="box-header with-border">
+                <div class="box-header with-border" style="height: 50px;">
                     <h3 class="box-title"><b>{{movie.title}}</b></h3>
                 </div>
                 <div class="box-body">
                     <img style="width: 300px; height: 430px;" src={{movie.poster}}>
                     <p>{{movie.year}} ({{movie.type}})</p>
-                    <button class="btn btn-block btn-default">Show Info</button>
+                    <button class="btn btn-block btn-default" (click)="openMovieDetail(movie.imdbID)">Show Info</button>
                     <button class="btn btn-block btn-primary">Add To My Movies</button>
                 </div>
             </div>

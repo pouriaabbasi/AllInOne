@@ -1,0 +1,45 @@
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h2 class="box-title">
+            {{movieModel.title}} ({{movieModel.year}}) [{{movieModel.imdbRating}}/10]
+        </h2>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col col-md-4">
+                <img [src]=movieModel.poster>
+            </div>
+            <div class="col col-md-8">
+                <p>{{movieModel.plot}}</p>
+                <p>
+                    <b>Director: </b> {{movieModel.director}}
+                </p>
+                <p>
+                    <b>Writer: </b> {{movieModel.writer}}
+                </p>
+                <p>
+                    <b>Starts: </b> {{movieModel.actors}}
+                </p>
+                <p>
+                    <b>Genre: </b> {{movieModel.genre}}
+                </p>
+                <p>
+                    <b>Runtime: </b> {{movieModel.runtime}}
+                </p>
+                <p>
+                    <b>Language: </b> {{movieModel.language}}
+                </p>
+                <p>
+                    <b>Box Office: </b> {{movieModel.boxOffice}}
+                </p>
+                <p>
+                    <b>Awards: </b> {{movieModel.awards}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+        <button class="btn btn-default" (click)="close()">Close</button>
+        <button class="btn btn-success pull-right" (click)="addToMyMovies()">Add To My Movies</button>
+    </div>
+</div>
