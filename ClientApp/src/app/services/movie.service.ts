@@ -22,4 +22,12 @@ export class MovieService extends BaseService {
   public getImdbMovieInfo(imdbId: string): Observable<MovieModel> {
     return super.post(`MovieMovie/ImdbGetInfoById/${imdbId}`, null);
   }
+
+  public addMovieFromImdb(imdbId: string): Observable<boolean> {
+    return super.post(`MovieMovie/AddMovieFromImdb/${imdbId}`, null);
+  }
+
+  public getMyMovies(): Observable<MovieModel[]> {
+    return super.get('MovieMovie/GetMyMovies');
+  }
 }

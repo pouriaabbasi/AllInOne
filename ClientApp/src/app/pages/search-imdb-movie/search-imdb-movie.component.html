@@ -17,7 +17,7 @@
                     <img style="width: 300px; height: 430px;" src={{movie.poster}}>
                     <p>{{movie.year}} ({{movie.type}})</p>
                     <button class="btn btn-block btn-default" (click)="openMovieDetail(movie.imdbID)">Show Info</button>
-                    <button class="btn btn-block btn-primary">Add To My Movies</button>
+                    <button class="btn btn-block btn-primary" (click)="addMovieFromImdb(movie.imdbID)">Add To My Movies</button>
                 </div>
             </div>
         </div>

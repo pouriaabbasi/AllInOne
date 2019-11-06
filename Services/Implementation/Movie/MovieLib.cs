@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AllInOne.Data;
@@ -39,19 +40,23 @@ namespace AllInOne.Services.Implementation.Movie
             this.languageRepo = languageRepo;
         }
 
-        public async Task<ImdbSearchModel> ImdbSearch(InputImdbSearchModel model)
+        public async Task<ImdbSearchModel> ImdbSearchAsync(InputImdbSearchModel model)
         {
             var url = model.CreateRequestUrl(_baseUrl);
             return await GetAsync<ImdbSearchModel>(url);
         }
-        public async Task<ImdbMovieModel> ImdbGetInfoById(string imdbId)
+
+        public async Task<ImdbMovieModel> ImdbGetInfoByIdAsync(string imdbId)
         {
             var url = $"{_baseUrl}i={imdbId}";
             return await GetAsync<ImdbMovieModel>(url);
         }
 
-        public async Task<bool> AddMovieFromImdb(string imdbId, long currentUserId)
+        public async Task<bool> AddMovieFromImdbAsync(string imdbId, long currentUserId)
         {
+            var movieEntity = await movieRepo.FirstAsync(x => x.ImdbId == imdbId);
+            if (movieEntity != null) throw new Exception("Duplicate Movie");
+
             var url = $"{_baseUrl}i={imdbId}";
             var result = await GetAsync<ImdbMovieModel>(url);
             var entity = new Data.Entity.Moive.Movie
@@ -86,6 +91,23 @@ namespace AllInOne.Services.Implementation.Movie
             await unitOfWork.CommitAsync();
 
             return true;
+        }
+
+        public async Task<List<MovieModel>> GetMyMoviesAsync(long currentUserId)
+        {
+            var result = await movieRepo.GetQuery()
+                .Where(x => x.UserId == currentUserId)
+                .ToAsyncEnumerable()
+                .Select(x => new MovieModel
+                {
+                    Title = x.Title,
+                    Type = x.Type.ToString(),
+                    Year = x.Year,
+                    Director = string.Join(",", x.MovieCasts.Where(r => r.CastType == CastTypeKind.Director).Select(r => r.Cast.FullName))
+                })
+                .ToList();
+
+            return result;
         }
 
         private List<Rating> CreateRating(Dictionary<string, string> rates)
@@ -164,22 +186,22 @@ namespace AllInOne.Services.Implementation.Movie
             return result;
         }
 
-        private async Task<List<MovieCast>> GetCasts(Dictionary<string, CastTypeKind> casts)
+        private async Task<List<MovieCast>> GetCasts(List<AddCastModel> casts)
         {
             var result = new List<MovieCast>();
 
             foreach (var cast in casts)
             {
-                var castEntity = await castRepo.FirstAsync(x => x.FullName.ToLower() == cast.Key.ToLower());
+                var castEntity = await castRepo.FirstAsync(x => x.FullName.ToLower() == cast.FullName.ToLower());
                 if (castEntity == null)
                     castEntity = new Cast
                     {
-                        FullName = cast.Key
+                        FullName = cast.FullName
                     };
                 result.Add(new MovieCast
                 {
                     Cast = castEntity,
-                    CastType = cast.Value
+                    CastType = cast.CastType
                 });
             }
 

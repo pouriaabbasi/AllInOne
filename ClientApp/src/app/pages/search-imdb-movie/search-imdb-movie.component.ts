@@ -60,4 +60,12 @@ export class SearchImdbMovieComponent extends BaseComponent implements OnInit {
     }, () => { });
   }
 
+  public addMovieFromImdb(imdbId: string) {
+    this.movieService.addMovieFromImdb(imdbId)
+      .subscribe(result => {
+        if (result) {
+          super.showSuccess('Add Movie', 'Movie was added successfuly');
+        }
+      });
+  }
 }

@@ -1,11 +1,11 @@
 <div class="box box-success">
     <div class="box-header with-border">
-        <h2 class="box-title">
+        <h2 class="box-title" *ngIf="movieModel.title">
             {{movieModel.title}} ({{movieModel.year}}) [{{movieModel.imdbRating}}/10]
         </h2>
     </div>
     <div class="box-body">
-        <div class="row">
+        <div class="row" *ngIf="movieModel.title">
             <div class="col col-md-4">
                 <img [src]=movieModel.poster>
             </div>
@@ -27,6 +27,9 @@
                     <b>Runtime: </b> {{movieModel.runtime}}
                 </p>
                 <p>
+                    <b>Country: </b> {{movieModel.country}}
+                </p>
+                <p>
                     <b>Language: </b> {{movieModel.language}}
                 </p>
                 <p>
@@ -34,6 +37,9 @@
                 </p>
                 <p>
                     <b>Awards: </b> {{movieModel.awards}}
+                </p>
+                <p>
+                    <b>Rated: </b> {{movieModel.rated}}
                 </p>
             </div>
         </div>

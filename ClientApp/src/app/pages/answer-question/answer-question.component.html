@@ -20,10 +20,13 @@
                 </div>
             </div>
         </div>
-        <div class="col col-md-6" style="text-align: start;">
+        <div class="col col-md-4" style="text-align: start;">
             <h5>Success : {{successCount}}/{{totalCurrentIndex-1}}({{successPercentage | number:'1.1-2'}}%)</h5>
         </div>
-        <div class="col col-md-6" style="text-align: end;">
+        <div class="col col-md-4" style="text-align: center;">
+            <h5>Fail Count : {{currentQuestion?.failCount}}</h5>
+        </div>
+        <div class="col col-md-4" style="text-align: end;">
             <h5>Fail : {{failCount}}/{{totalCurrentIndex-1}}({{failPercentage | number:'1.1-2'}}%)</h5>
         </div>
     </div>

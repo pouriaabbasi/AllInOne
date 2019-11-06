@@ -63,12 +63,12 @@ namespace AllInOne.Models.Movie.Movie
         public string TotalSeasons { get; set; }
         public string SeriesId { get; set; }
 
-        public Dictionary<string, CastTypeKind> GetCasts()
+        public List<AddCastModel> GetCasts()
         {
-            var result = new Dictionary<string, CastTypeKind>();
+            var result = new List<AddCastModel>();
 
             foreach (var director in Director.Split(',').Select(x => x.Trim()))
-                result.Add(director, CastTypeKind.Director);
+                result.Add(new AddCastModel(director, CastTypeKind.Director));
 
             foreach (var writer in Writer.Split(',').Select(x => x.Trim()))
             {
@@ -76,11 +76,11 @@ namespace AllInOne.Models.Movie.Movie
                 var startRemoveIndex = writer.IndexOf('(');
                 if (startRemoveIndex != -1)
                     finalWriter = writer.Remove(startRemoveIndex);
-                result.Add(finalWriter, CastTypeKind.Writer);
+                result.Add(new AddCastModel(finalWriter, CastTypeKind.Writer));
             }
 
             foreach (var actor in Actors.Split(',').Select(x => x.Trim()))
-                result.Add(actor, CastTypeKind.Actor);
+                result.Add(new AddCastModel(actor, CastTypeKind.Actor));
 
             return result;
         }

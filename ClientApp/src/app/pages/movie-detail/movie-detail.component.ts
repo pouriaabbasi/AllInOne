@@ -41,7 +41,12 @@ export class MovieDetailComponent extends BaseComponent implements OnInit {
   }
 
   public addToMyMovies() {
-    this.activeModal.close(true);
+    this.movieService.addMovieFromImdb(this.movieModel.imdbID)
+      .subscribe(result => {
+        if (result) {
+          this.activeModal.close(result);
+          super.showSuccess('Add Movie', 'Movie was added successfuly');
+        }
+      });
   }
-
 }
