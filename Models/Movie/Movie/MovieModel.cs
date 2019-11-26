@@ -13,5 +13,6 @@ namespace AllInOne.Models.Movie.Movie
         public string Actor { get; set; }
         public bool Seen { get; set; }
         public string LocalPath { get; set; }
+        public string Poster { get; set; }
     }
 }

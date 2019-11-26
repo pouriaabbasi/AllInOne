@@ -136,6 +136,7 @@ namespace AllInOne.Services.Implementation.Movie
                     Writer = (filter.Writer == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieCasts.Where(r => r.CastType == CastTypeKind.Writer).Select(r => r.Cast.FullName)),
                     Actor = (filter.Star == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieCasts.Where(r => r.CastType == CastTypeKind.Actor).Select(r => r.Cast.FullName)),
                     LocalPath = m.LocalPath,
+                    Poster = m.Poster,
                     Seen = m.Seen
                 };
 
