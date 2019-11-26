@@ -42,7 +42,9 @@ namespace AllInOne.Data
         public DbSet<MovieCountry> MovieCountries { get; set; }        
         public DbSet<MovieGenre> MovieGenres { get; set; }        
         public DbSet<MovieLanguage> MovieLanguages { get; set; }        
-        public DbSet<Rating> Ratings { get; set; }        
+        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<MovieCollection> MovieCollections { get; set; }
+        public DbSet<MovieCollectionDetail> MovieCollectionDetails { get; set; }
         #endregion
 
         #region Security

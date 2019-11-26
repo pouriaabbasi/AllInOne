@@ -22,6 +22,8 @@ namespace AllInOne.Services.Implementation.Movie
         private readonly IRepository<Country> countryRepo;
         private readonly IRepository<Genre> genreRepo;
         private readonly IRepository<Language> languageRepo;
+        private readonly IRepository<MovieCollection> movieCollectionRepo;
+        private readonly IRepository<MovieCollectionDetail> movieCollectionDetailRepo;
 
         public MovieLib(
             IUnitOfWork unitOfWork,
@@ -29,7 +31,9 @@ namespace AllInOne.Services.Implementation.Movie
             IRepository<Cast> castRepo,
             IRepository<Country> countryRepo,
             IRepository<Genre> genreRepo,
-            IRepository<Language> languageRepo
+            IRepository<Language> languageRepo,
+            IRepository<MovieCollection> movieCollectionRepo,
+            IRepository<MovieCollectionDetail> movieCollectionDetailRepo
             )
         {
             this.unitOfWork = unitOfWork;
@@ -38,6 +42,8 @@ namespace AllInOne.Services.Implementation.Movie
             this.countryRepo = countryRepo;
             this.genreRepo = genreRepo;
             this.languageRepo = languageRepo;
+            this.movieCollectionRepo = movieCollectionRepo;
+            this.movieCollectionDetailRepo = movieCollectionDetailRepo;
         }
 
         public async Task<ImdbSearchModel> ImdbSearchAsync(InputImdbSearchModel model)
@@ -52,12 +58,12 @@ namespace AllInOne.Services.Implementation.Movie
             return await GetAsync<ImdbMovieModel>(url);
         }
 
-        public async Task<bool> AddMovieFromImdbAsync(string imdbId, long currentUserId)
+        public async Task<string> AddMovieFromImdbAsync(AddMovieFromImdbInput model, long currentUserId)
         {
-            var movieEntity = await movieRepo.FirstAsync(x => x.ImdbId == imdbId);
+            var movieEntity = await movieRepo.FirstAsync(x => x.ImdbId == model.ImdbId);
             if (movieEntity != null) throw new Exception("Duplicate Movie");
 
-            var url = $"{_baseUrl}i={imdbId}";
+            var url = $"{_baseUrl}i={model.ImdbId}";
             var result = await GetAsync<ImdbMovieModel>(url);
             var entity = new Data.Entity.Moive.Movie
             {
@@ -66,7 +72,7 @@ namespace AllInOne.Services.Implementation.Movie
                 DvdReleaseDate = result.DVD,
                 ImdbId = result.imdbID,
                 ImdbRating = result.imdbRating,
-                ImdbVotes = result.imdbRating,
+                ImdbVotes = result.imdbVotes,
                 Metascore = result.Metascore,
                 MovieCasts = await GetCasts(result.GetCasts()),
                 MovieCountries = await GetCountries(result.GetCountries()),
@@ -84,30 +90,105 @@ namespace AllInOne.Services.Implementation.Movie
                 Type = (TypeKind)Enum.Parse(typeof(TypeKind), result.Type),
                 UserId = currentUserId,
                 Website = result.Website,
-                Year = result.Year
+                Year = result.Year,
+                LocalPath = model.LocalPath
             };
+            var posterCount = entity.Poster.Count();
+            var plotCount = entity.Plot.Count();
 
             await movieRepo.AddAsync(entity);
             await unitOfWork.CommitAsync();
 
+            return await BeautifyLocalPathAsync(entity.Id, currentUserId);
+        }
+
+        public async Task<List<MovieModel>> GetMyMoviesAsync(GetMyMoviesFilter filter, long currentUserId)
+        {
+            var result =
+                from m in movieRepo.GetQuery()
+                join mcd in movieCollectionDetailRepo.GetQuery() on m.Id equals mcd.MovieId into mmcd
+                from mcd in mmcd.DefaultIfEmpty()
+                join mc in movieCollectionRepo.GetQuery() on mcd.MovieCollectionId equals mc.Id into mcdmc
+                from mc in mcdmc.DefaultIfEmpty()
+                where
+                    m.UserId == currentUserId
+                    && (m.Title.Contains(filter.Title) || (mc != null && mc.Name.Contains(filter.Title)))
+                    && (filter.MinRate == 0 || Convert.ToDouble(m.ImdbRating) >= filter.MinRate)
+                    && (filter.MaxRate == 0 || Convert.ToDouble(m.ImdbRating) <= filter.MaxRate)
+                    && (filter.MinYear == 0 || Convert.ToInt32(m.Year) >= filter.MinYear)
+                    && (filter.MaxYear == 0 || Convert.ToInt32(m.Year) <= filter.MaxYear)
+                    && (filter.Rated == null || filter.Rated.Contains(m.Rated))
+                    && (filter.Genre == string.Empty || m.MovieGenres.Any(r => r.Genre.Title.Contains(filter.Genre)))
+                    && (filter.Director == string.Empty || m.MovieCasts.Any(r => r.CastType == CastTypeKind.Director && r.Cast.FullName.Contains(filter.Director)))
+                    && (filter.Writer == string.Empty || m.MovieCasts.Any(r => r.CastType == CastTypeKind.Writer && r.Cast.FullName.Contains(filter.Writer)))
+                    && (filter.Star == string.Empty || m.MovieCasts.Any(r => r.CastType == CastTypeKind.Actor && r.Cast.FullName.Contains(filter.Star)))
+                    && (filter.Seen == null || m.Seen == filter.Seen)
+                orderby mc.Name, mcd.Number, m.Title
+                select new MovieModel
+                {
+                    Id = m.Id,
+                    Title = (mc == null ? "" : "(" + mc.Name + " - " + mcd.Number.ToString() + ") ") + m.Title,
+                    ImdbRating = m.ImdbRating,
+                    Year = m.Year,
+                    Rated = m.Rated,
+                    Genre = (filter.Genre == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieGenres.Select(r => r.Genre.Title)),
+                    Director = (filter.Director == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieCasts.Where(r => r.CastType == CastTypeKind.Director).Select(r => r.Cast.FullName)),
+                    Writer = (filter.Writer == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieCasts.Where(r => r.CastType == CastTypeKind.Writer).Select(r => r.Cast.FullName)),
+                    Actor = (filter.Star == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieCasts.Where(r => r.CastType == CastTypeKind.Actor).Select(r => r.Cast.FullName)),
+                    LocalPath = m.LocalPath,
+                    Seen = m.Seen
+                };
+
+            return await result.ToAsyncEnumerable().ToList();
+        }
+
+        public async Task<bool> DeleteMovieAsync(long movieId, long currentUserId)
+        {
+            var entity = await movieRepo.FirstAsync(x =>
+                x.Id == movieId
+                && x.UserId == currentUserId);
+            if (entity == null) throw new Exception("Movie not exist!");
+
+            movieRepo.Delete(entity);
+            await unitOfWork.CommitAsync();
             return true;
         }
 
-        public async Task<List<MovieModel>> GetMyMoviesAsync(long currentUserId)
+        public async Task<string> BeautifyLocalPathAsync(long movieId, long currentUserId)
         {
-            var result = await movieRepo.GetQuery()
-                .Where(x => x.UserId == currentUserId)
-                .ToAsyncEnumerable()
-                .Select(x => new MovieModel
-                {
-                    Title = x.Title,
-                    Type = x.Type.ToString(),
-                    Year = x.Year,
-                    Director = string.Join(",", x.MovieCasts.Where(r => r.CastType == CastTypeKind.Director).Select(r => r.Cast.FullName))
-                })
-                .ToList();
+            var entity =
+                await movieRepo.FirstAsync(x =>
+                    x.Id == movieId
+                    && x.UserId == currentUserId);
+            if (entity == null) throw new Exception("Movie does not exist");
 
-            return result;
+            var currentPath = entity.LocalPath;
+            var invalidChars = Path.GetInvalidFileNameChars();
+            var fileName = entity.Title;
+            foreach (var invalidChar in invalidChars)
+                fileName = fileName.Replace(invalidChar.ToString(), string.Empty);
+            var newFileName = $"{fileName} [{entity.Year}] ({entity.ImdbRating})";
+            var oldFileName = Path.GetFileName(currentPath);
+            entity.LocalPath = entity.LocalPath.Replace(oldFileName, newFileName);
+
+            movieRepo.Update(entity);
+            await unitOfWork.CommitAsync();
+
+            return newFileName;
+        }
+
+        public async Task<bool> SetSeenFlagAsync(long movieId, long currentUserId)
+        {
+            var entity = await movieRepo.FirstAsync(x => x.Id == movieId && x.UserId == currentUserId);
+            if (entity == null) throw new Exception("Movie not found");
+
+            entity.Seen = true;
+
+            movieRepo.Update(entity);
+
+            await unitOfWork.CommitAsync();
+
+            return true;
         }
 
         private List<Rating> CreateRating(Dictionary<string, string> rates)

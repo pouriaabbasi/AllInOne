@@ -4,14 +4,16 @@ using AllInOne.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AllInOne.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191114055933_add local path to movie")]
+    partial class addlocalpathtomovie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,7 +341,7 @@ namespace AllInOne.Migrations
                         .HasMaxLength(1000);
 
                     b.Property<string>("Poster")
-                        .HasMaxLength(300);
+                        .HasMaxLength(100);
 
                     b.Property<string>("Production")
                         .HasMaxLength(50);
@@ -349,8 +351,6 @@ namespace AllInOne.Migrations
 
                     b.Property<string>("Released")
                         .HasMaxLength(20);
-
-                    b.Property<bool>("Seen");
 
                     b.Property<string>("SeriesId")
                         .HasMaxLength(20);
@@ -397,41 +397,6 @@ namespace AllInOne.Migrations
                     b.HasIndex("MovieId");
 
                     b.ToTable("MovieCast","Movie");
-                });
-
-            modelBuilder.Entity("AllInOne.Data.Entity.Moive.MovieCollection", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MovieCollection","Movie");
-                });
-
-            modelBuilder.Entity("AllInOne.Data.Entity.Moive.MovieCollectionDetail", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("MovieCollectionId");
-
-                    b.Property<long>("MovieId");
-
-                    b.Property<byte>("Number");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovieCollectionId");
-
-                    b.HasIndex("MovieId");
-
-                    b.ToTable("MovieCollectionDetail","Movie");
                 });
 
             modelBuilder.Entity("AllInOne.Data.Entity.Moive.MovieCountry", b =>
@@ -706,19 +671,6 @@ namespace AllInOne.Migrations
 
                     b.HasOne("AllInOne.Data.Entity.Moive.Movie", "Movie")
                         .WithMany("MovieCasts")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AllInOne.Data.Entity.Moive.MovieCollectionDetail", b =>
-                {
-                    b.HasOne("AllInOne.Data.Entity.Moive.MovieCollection", "MovieCollection")
-                        .WithMany("MovieCollectionDetails")
-                        .HasForeignKey("MovieCollectionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("AllInOne.Data.Entity.Moive.Movie", "Movie")
-                        .WithMany("MovieCollectionDetails")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -22,7 +22,7 @@ namespace AllInOne.Data.Entity.Moive
         public string Plot { get; set; }
         [MaxLength(200)]
         public string Awards { get; set; }
-        [MaxLength(100)]
+        [MaxLength(300)]
         public string Poster { get; set; }
         [MaxLength(50)]
         public string Metascore { get; set; }
@@ -45,6 +45,9 @@ namespace AllInOne.Data.Entity.Moive
         public string TotalSeasons { get; set; }
         [MaxLength(20)]
         public string SeriesId { get; set; }
+        [MaxLength(300)]
+        public string LocalPath { get; set; }
+        public bool Seen { get; set; }
 
         public virtual User User { get; set; }
         public virtual ICollection<MovieGenre> MovieGenres { get; set; }
@@ -52,5 +55,6 @@ namespace AllInOne.Data.Entity.Moive
         public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
         public virtual ICollection<MovieCountry> MovieCountries { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
+        public virtual ICollection<MovieCollectionDetail> MovieCollectionDetails { get; set; }
     }
 }

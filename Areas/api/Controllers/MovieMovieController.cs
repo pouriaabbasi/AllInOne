@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AllInOne.Areas.api.Controllers
 {
-    // [Route("api/[controller]/[action]")]
     [Route("api/[controller]/[action]")]
     [Area("api")]
     [ApiController]
@@ -51,12 +50,12 @@ namespace AllInOne.Areas.api.Controllers
             }
         }
 
-        [HttpPost("{imdbId}")]
-        public async Task<IActionResult> AddMovieFromImdb(string imdbId)
+        [HttpPost]
+        public async Task<IActionResult> AddMovieFromImdb([FromBody]AddMovieFromImdbInput model)
         {
             try
             {
-                var result = await movieLib.AddMovieFromImdbAsync(imdbId, CurrentUserId);
+                var result = await movieLib.AddMovieFromImdbAsync(model, CurrentUserId);
                 return CustomResult(result);
             }
             catch (System.Exception exp)
@@ -65,12 +64,55 @@ namespace AllInOne.Areas.api.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetMyMovies()
+        [HttpPost]
+        public async Task<IActionResult> GetMyMovies(GetMyMoviesFilter model)
         {
             try
             {
-                var result = await movieLib.GetMyMoviesAsync(CurrentUserId);
+                var result = await movieLib.GetMyMoviesAsync(model, CurrentUserId);
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
+    
+        [HttpDelete("{movieId}")]
+        public async Task<IActionResult> DeleteMovie(long movieId)
+        {
+            try
+            {
+                var result = await movieLib.DeleteMovieAsync(movieId, CurrentUserId);
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
+    
+        [HttpPost("{movieId}")]
+        public async Task<IActionResult> BeautifyLocalPath(long movieId)
+        {
+            try
+            {
+                var result = await movieLib.BeautifyLocalPathAsync(movieId, CurrentUserId);
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        
+        }
+    
+        [HttpPut("{movieId}")]
+        public async Task<IActionResult> SetSeenFlag(long movieId)
+        {
+            try
+            {
+                var result = await movieLib.SetSeenFlagAsync(movieId, CurrentUserId);
                 return CustomResult(result);
             }
             catch (System.Exception exp)
