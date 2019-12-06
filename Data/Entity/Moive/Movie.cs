@@ -47,6 +47,8 @@ namespace AllInOne.Data.Entity.Moive
         public string SeriesId { get; set; }
         [MaxLength(300)]
         public string LocalPath { get; set; }
+        [MaxLength(20)]
+        public string Runtime { get; set; }
         public bool Seen { get; set; }
 
         public virtual User User { get; set; }

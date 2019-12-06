@@ -10,7 +10,7 @@ namespace AllInOne.Models.Movie.Movie
         public string Genre { get; set; }
         public string Director { get; set; }
         public string Writer { get; set; }
-        public string Actor { get; set; }
+        public string Actors { get; set; }
         public bool Seen { get; set; }
         public string LocalPath { get; set; }
         public string Poster { get; set; }

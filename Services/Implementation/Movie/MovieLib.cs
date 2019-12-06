@@ -84,6 +84,7 @@ namespace AllInOne.Services.Implementation.Movie
                 Rated = result.Rated,
                 Ratings = CreateRating(result.GetRatings()),
                 Released = result.Released,
+                Runtime = result.Runtime,
                 SeriesId = result.SeriesId,
                 Title = result.Title,
                 TotalSeasons = result.TotalSeasons,
@@ -118,10 +119,10 @@ namespace AllInOne.Services.Implementation.Movie
                     && (filter.MinYear == 0 || Convert.ToInt32(m.Year) >= filter.MinYear)
                     && (filter.MaxYear == 0 || Convert.ToInt32(m.Year) <= filter.MaxYear)
                     && (filter.Rated == null || filter.Rated.Contains(m.Rated))
-                    && (filter.Genre == string.Empty || m.MovieGenres.Any(r => r.Genre.Title.Contains(filter.Genre)))
-                    && (filter.Director == string.Empty || m.MovieCasts.Any(r => r.CastType == CastTypeKind.Director && r.Cast.FullName.Contains(filter.Director)))
-                    && (filter.Writer == string.Empty || m.MovieCasts.Any(r => r.CastType == CastTypeKind.Writer && r.Cast.FullName.Contains(filter.Writer)))
-                    && (filter.Star == string.Empty || m.MovieCasts.Any(r => r.CastType == CastTypeKind.Actor && r.Cast.FullName.Contains(filter.Star)))
+                    && (string.IsNullOrWhiteSpace(filter.Genre) || m.MovieGenres.Any(r => r.Genre.Title.Contains(filter.Genre)))
+                    && (string.IsNullOrWhiteSpace(filter.Director) || m.MovieCasts.Any(r => r.CastType == CastTypeKind.Director && r.Cast.FullName.Contains(filter.Director)))
+                    && (string.IsNullOrWhiteSpace(filter.Writer) || m.MovieCasts.Any(r => r.CastType == CastTypeKind.Writer && r.Cast.FullName.Contains(filter.Writer)))
+                    && (string.IsNullOrWhiteSpace(filter.Star) || m.MovieCasts.Any(r => r.CastType == CastTypeKind.Actor && r.Cast.FullName.Contains(filter.Star)))
                     && (filter.Seen == null || m.Seen == filter.Seen)
                 orderby mc.Name, mcd.Number, m.Title
                 select new MovieModel
@@ -134,13 +135,58 @@ namespace AllInOne.Services.Implementation.Movie
                     Genre = (filter.Genre == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieGenres.Select(r => r.Genre.Title)),
                     Director = (filter.Director == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieCasts.Where(r => r.CastType == CastTypeKind.Director).Select(r => r.Cast.FullName)),
                     Writer = (filter.Writer == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieCasts.Where(r => r.CastType == CastTypeKind.Writer).Select(r => r.Cast.FullName)),
-                    Actor = (filter.Star == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieCasts.Where(r => r.CastType == CastTypeKind.Actor).Select(r => r.Cast.FullName)),
+                    Actors = (filter.Star == string.Empty && !filter.ShowAllInfo) ? string.Empty : string.Join(',', m.MovieCasts.Where(r => r.CastType == CastTypeKind.Actor).Select(r => r.Cast.FullName)),
                     LocalPath = m.LocalPath,
                     Poster = m.Poster,
                     Seen = m.Seen
                 };
 
             return await result.ToAsyncEnumerable().ToList();
+        }
+
+        public async Task<ImdbMovieModel> GetMovieAsync(long movieId, long currentUserId)
+        {
+            var entity = await movieRepo.FirstAsync(x => x.Id == movieId && x.UserId == currentUserId);
+            if (entity == null) throw new Exception("The movie is not exist");
+
+            return new ImdbMovieModel
+            {
+                Actors = string.Join(',', entity.MovieCasts.Where(r => r.CastType == CastTypeKind.Actor).Select(r => r.Cast.FullName)),
+                Director = string.Join(',', entity.MovieCasts.Where(r => r.CastType == CastTypeKind.Director).Select(r => r.Cast.FullName)),
+                Genre = string.Join(',', entity.MovieGenres.Select(r => r.Genre.Title)),
+                imdbRating = entity.ImdbRating,
+                Poster = entity.Poster,
+                Rated = entity.Rated,
+                Title = entity.Title,
+                Writer = entity.Title,
+                Year = entity.Year,
+                imdbID = entity.ImdbId,
+                Plot = entity.Plot,
+                Awards = entity.Awards,
+                BoxOffice = entity.BoxOffice,
+                Country = string.Join(',', entity.MovieCountries.Select(r => r.Country.Name)),
+                DVD = entity.DvdReleaseDate,
+                imdbVotes = entity.ImdbVotes,
+                Language = string.Join(',', entity.MovieLanguages.Select(r => r.Language.Name)),
+                Metascore = entity.Metascore,
+                Production = entity.Production,
+                Released = entity.Released,
+                Runtime = entity.Runtime,
+                SeriesId = entity.SeriesId,
+                Type = Convert.ToString(entity.Type),
+                Website = entity.Website
+            };
+        }
+
+        public async Task<List<string>> GetAllLocalPathsAsync(long currentUserId)
+        {
+            var result = await movieRepo.GetQuery()
+                .Where(x => x.UserId == currentUserId)
+                .Select(x => x.LocalPath)
+                .ToAsyncEnumerable()
+                .ToList();
+
+            return result;
         }
 
         public async Task<bool> DeleteMovieAsync(long movieId, long currentUserId)

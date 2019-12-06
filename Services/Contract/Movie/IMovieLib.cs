@@ -13,5 +13,7 @@ namespace AllInOne.Services.Contract.Movie
         Task<bool> DeleteMovieAsync(long movieId, long currentUserId);
         Task<string> BeautifyLocalPathAsync(long movieId, long currentUserId);
         Task<bool> SetSeenFlagAsync(long movieId, long currentUserId);
+        Task<List<string>> GetAllLocalPathsAsync(long currentUserId);
+        Task<ImdbMovieModel> GetMovieAsync(long imdbId, long currentUserId);
     }
 }

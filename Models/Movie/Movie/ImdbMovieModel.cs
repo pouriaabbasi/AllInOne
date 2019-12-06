@@ -7,6 +7,7 @@ namespace AllInOne.Models.Movie.Movie
 {
     public class ImdbMovieModel
     {
+        public ImdbMovieModel() { }
         public ImdbMovieModel(string title, string year, string rated, string released, string runtime, string genre, string director, string writer, string actors, string plot, string language, string country, string awards, string poster, string metascore, string imdbRating, string imdbVotes, string imdbID, string type, string dVD, string boxOffice, string production, string website, string totalSeasons, string seriesId)
         {
             this.Title = title;

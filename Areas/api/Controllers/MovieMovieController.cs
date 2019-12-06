@@ -120,5 +120,33 @@ namespace AllInOne.Areas.api.Controllers
                 return CustomError(exp);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllLocalPaths()
+        {
+            try
+            {
+                var result = await movieLib.GetAllLocalPathsAsync(CurrentUserId);
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
+
+        [HttpPost("{movieId}")]
+        public async Task<IActionResult> GetMovie(long movieId)
+        {
+            try
+            {
+                var result = await movieLib.GetMovieAsync(movieId, CurrentUserId);
+                return CustomResult(result);
+            }
+            catch (System.Exception exp)
+            {
+                return CustomError(exp);
+            }
+        }
     }
 }
