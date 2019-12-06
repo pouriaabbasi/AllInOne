@@ -4,14 +4,16 @@ using AllInOne.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AllInOne.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191206201456_add user to movie collection")]
+    partial class addusertomoviecollection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -411,7 +413,7 @@ namespace AllInOne.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(50);
 
-                    b.Property<long>("UserId");
+                    b.Property<long?>("UserId");
 
                     b.HasKey("Id");
 

@@ -39,9 +39,9 @@ namespace AllInOne.Data
         public DbSet<Language> Languages { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MovieCast> MovieCasts { get; set; }
-        public DbSet<MovieCountry> MovieCountries { get; set; }        
-        public DbSet<MovieGenre> MovieGenres { get; set; }        
-        public DbSet<MovieLanguage> MovieLanguages { get; set; }        
+        public DbSet<MovieCountry> MovieCountries { get; set; }
+        public DbSet<MovieGenre> MovieGenres { get; set; }
+        public DbSet<MovieLanguage> MovieLanguages { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<MovieCollection> MovieCollections { get; set; }
         public DbSet<MovieCollectionDetail> MovieCollectionDetails { get; set; }
@@ -56,5 +56,13 @@ namespace AllInOne.Data
         public DbSet<List> Lists { get; set; }
         public DbSet<Item> Items { get; set; }
         #endregion
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+            .HasMany(x => x.MovieCollections)
+            .WithOne(x => x.User)
+            .OnDelete(DeleteBehavior.SetNull);
+        }
     }
 }

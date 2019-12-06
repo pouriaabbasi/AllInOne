@@ -33,5 +33,6 @@ namespace AllInOne.Data.Entity.Security
         public virtual ICollection<Box> Boxes { get; set; }
         public virtual ICollection<TelegramUser> TelegramUsers { get; set; }
         public virtual ICollection<Movie> Movies { get; set; }
+        public virtual ICollection<MovieCollection> MovieCollections { get; set; }
     }
 }

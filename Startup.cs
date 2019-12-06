@@ -103,6 +103,7 @@ namespace AllInOne
             services.AddScoped<IItemLib, ItemLib>();
             //Movie
             services.AddScoped<IMovieLib, MovieLib>();
+            services.AddScoped<ICollectionLib, CollectionLib>();
             #endregion
 
             #region bot
